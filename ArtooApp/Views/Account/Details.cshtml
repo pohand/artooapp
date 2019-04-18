@@ -1,0 +1,88 @@
+﻿@model LoginViewModel
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a href="#"></a>
+    </li>
+    <li class="breadcrumb-item active">Chỉnh sửa account</li>
+</ol>
+
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <strong>Chỉnh sửa account</strong>
+                        @if (!string.IsNullOrEmpty(ViewBag.message))
+                        {
+                            <span class="badge badge-success float-right">@ViewBag.message</span>
+                        }
+                    </div>
+                    <form asp-controller="Account" asp-action="Details" method="post" class="form-horizontal" role="form">
+                        <div class="card-body">
+                            <hr />
+                            <div asp-validation-summary="All" class="text-danger"></div>
+
+                            <div class="form-group row" hidden>
+                                <label asp-for="Id" class="col-md-3 form-control-label" for="text-input">Id</label>
+                                <div class="col-md-9">
+                                    <input asp-for="Id" class="form-control" placeholder="Id" value="@Model.Id" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="UserName" class="col-md-3 form-control-label" for="text-input">Username</label>
+                                <div class="col-md-9">
+                                    <input asp-for="UserName" class="form-control" placeholder="Username" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="Password" class="col-md-3 form-control-label" for="text-input">Password</label>
+                                <div class="col-md-9">
+                                    <input asp-for="Password" class="form-control" placeholder="Password" />
+                                    @*<span asp-validation-for="Password" class="help-block"></span>*@
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="Email" class="col-md-3 form-control-label" for="text-input">Email</label>
+                                <div class="col-md-9">
+                                    <input asp-for="Email" class="form-control" placeholder="Email" />
+                                    <span asp-validation-for="Email" class="help-block"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="FactoryId" class="col-md-3 form-control-label"></label>
+                                <div class="col-md-9">
+                                    <select asp-for="FactoryId" asp-items="@Model.Factories" class="form-control form-control-sm">
+                                        <option value="0">Please select</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="TechManagerId" class="col-md-3 form-control-label"></label>
+                                <div class="col-md-9">
+                                    <select asp-for="TechManagerId" asp-items="@Model.TechManagers" class="form-control form-control-sm">
+                                        <option value="0">Please select</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="RoleId" class="col-md-3 form-control-label"></label>
+                                <div class="col-md-9">
+                                    <select asp-for="RoleId" asp-items="@Model.Roles" class="form-control form-control-sm">
+                                        <option>Please select</option>
+                                    </select>
+                                    <span asp-validation-for="RoleId" class="help-block"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Update</button>
+                            <a asp-action="Index" class="btn btn-sm btn-danger"><i class="fa fa-ban"></i> Back To List</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,74 @@
+﻿@model List<LoginViewModel>
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a href="#">Home</a>
+    </li>
+    <li class="breadcrumb-item active">Danh sách user</li>
+</ol>
+
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fa fa-align-justify"></i>
+                        <strong>Danh sách user</strong>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>UserName</th>
+                                    <th>Role</th>
+                                    <th>Email</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                <tr>
+                                    <td>@item.UserName</td>
+                                    <td>@item.RoleName</td>
+                                    <td>@item.Email</td>
+                                    <td>
+                                        <a asp-controller="Account" asp-action="Details" class="btn btn-success" asp-route-id="@item.Id">Update</a>
+                                        <a asp-action="DeleteUser" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                                    </td>
+                                </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                        @*<ul class="pagination">
+                            <li class="page-item">
+                                <a class="page-link" href="#">Prev</a>
+                            </li>
+                            <li class="page-item active">
+                                <a class="page-link" href="#">1</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">2</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">3</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">4</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">Next</a>
+                            </li>
+                        </ul>*@
+                    </div>
+                    <div class="card-footer">
+                        <a asp-controller="Account" asp-action="Register" class="btn btn-sm btn-primary float-right"><i class="fa fa-dot-circle-o"></i> Add</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.conainer-fluid -->
+    </div>
+</div>

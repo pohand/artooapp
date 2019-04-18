@@ -1,0 +1,452 @@
+﻿@model InspectionViewModel
+@using Artoo.Common;
+<!-- Breadcrumb -->
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a href="#">Home</a>
+    </li>
+    <li class="breadcrumb-item active">Inspection</li>
+</ol>
+
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <strong>Final Inspection</strong>
+                        <small><span class="text-danger">* Required</span></small>
+                    </div>
+                    <div class="card-body">
+                        <form asp-controller="Inspection" asp-action="Details" method="post" id="inspectionForm" class="form-horizontal" role="form">
+                            <div class="form-group">
+                                <div asp-validation-summary="All" class="text-danger"></div>
+                            </div>
+                            <div hidden class="form-group row">
+                                <label class="col-md-3 form-control-label" for="select">ID</label>
+                                <div class="col-md-3">
+                                    <input asp-for="InspectionId" class="form-control" />
+                                </div>
+                                <div class="col-md-6">
+                                    <input asp-for="OrderType" class="form-control" />
+                                </div>
+                            </div>
+                            <div hidden class="form-group row">
+                                <label class="col-md-3 form-control-label" for="select">PassionBrandId</label>
+                                <div class="col-md-9">
+                                    <input asp-for="PassionBrandId" class="form-control" />
+                                </div>
+                            </div>
+                            <div hidden class="form-group row">
+                                <label class="col-md-3 form-control-label" for="select">Desc</label>
+                                <div class="col-md-9">
+                                    <input asp-for="Description" class="form-control" />
+                                </div>
+                            </div>
+                            <div hidden class="form-group row">
+                                <label class="col-md-3 form-control-label" for="select">Tech</label>
+                                <div class="col-md-9">
+                                    <input asp-for="TechManagerName" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 form-control-label textright" for="select">Người kiểm</label>
+                                <div class="col-md-2">
+                                    <input asp-for="Username" readonly class="form-control" />
+                                </div>
+                                <label class="col-md-2 form-control-label textright">Ngày kiểm</label>
+                                <div class="col-md-2">
+                                    <input asp-for="FinalDate" readonly class="form-control" />
+                                </div>
+                                <label class="col-md-2 form-control-label textright" for="text-input">Passion Brand</label>
+                                <div class="col-md-2">
+                                    <input asp-for="PassionBrandName" readonly class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 form-control-label textright" for="email-input">IMAN</label>
+                                <div class="col-md-2">
+                                    <input asp-for="IMAN" readonly class="form-control" />
+                                </div>
+                                <label class="col-md-2 form-control-label textright" for="password-input">Model</label>
+                                <div class="col-md-2">
+                                    <input asp-for="Model" readonly class="form-control" />
+                                </div>
+                                <label class="col-md-2 form-control-label textright" for="textarea-input">Số PO</label>
+                                <div class="col-md-2">
+                                    <input asp-for="OrderNumber" readonly class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 form-control-label textright" for="textarea-input">Order Quantity</label>
+                                <div class="col-md-2">
+                                    <input asp-for="OrderQuantity" readonly class="form-control" />
+                                </div>
+                                <label class="col-md-2 form-control-label textright">Xưởng sản xuất</label>
+                                <div class="col-md-2">
+                                    <input asp-for="FactoryName" readonly class="form-control" />
+                                </div>
+                                <label class="col-md-2 form-control-label textright" for="text-input">Loại đơn hàng</label>
+                                <div class="col-md-2">
+                                    @if (Model.OrderType == (int)OrderType.Implantation)
+                                    {
+                                        <input asp-for="OrderTypeName" readonly class="form-control is-valid ordertypehighlight" />
+                                    }
+                                    else
+                                    {
+                                        <input asp-for="OrderTypeName" readonly class="form-control " />
+                                    }
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 form-control-label textright" for="textarea-input">Số lượng kiểm<span class="text-danger">*</span></label>
+                                <div class="col-md-4">
+                                    <input asp-for="NumberChecked" class="form-control" />
+                                    <span asp-validation-for="NumberChecked" class="text-danger"></span>
+                                </div>
+                                <label class="col-md-2 form-control-label textright" for="textarea-input">Số lượng sản phẩm lỗi<span class="text-danger">*</span></label>
+                                <div class="col-md-4">
+                                    <input asp-for="ProductQuantityChecked" class="form-control" />
+                                    <span asp-validation-for="ProductQuantityChecked" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-2 textright">
+                                    <label>Result<span class="text-danger">*</span></label>
+                                    <br />
+                                    <small>Reject hoặc Accept</small>
+                                </div>
+                                <div class="col-md-4">
+                                    <select asp-for="Result" class="form-control">
+                                        <option value="0"> Please select</option>
+                                        <option value="1"> Accept </option>
+                                        <option value="2"> Reject</option>
+                                    </select>
+                                    <span asp-validation-for="Result" class="text-danger"></span>
+                                </div>
+                                <label class="col-md-2 form-control-label textright">3rd Party</label>
+                                <div class="col-md-1">
+                                    <label class="switch switch-3d switch-primary">
+                                        <input type="checkbox" class="switch-input" name="IsThirdParty" asp-for="IsThirdParty">
+                                        <span class="switch-label"></span>
+                                        <span class="switch-handle"></span>
+                                    </label>
+                                </div>
+                                <div class="col-md-3" id="divDate" >
+                                    <input type="text" asp-for="ThirdPartyDate" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-2 textright">
+                                    <label class="textright">Thông số<span class="text-danger">*</span> </label>
+                                    <br />
+                                    <small>Đo thông số sản phẩm</small>
+                                </div>
+                                <div class="col-md-10">
+                                    <input asp-for="Parameter" class="form-control" />
+                                    <span asp-validation-for="Parameter" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-2">
+                                    <label for="select">Kiểm tra bằng tay và mắt</label>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="form-group row col-md-12">
+                                        <div class="col-md-8">
+                                            <input id="ManualMistakeSelect" class="form-control tagsinput" />
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="input-group">
+                                                <span class="input-group-btn">
+                                                    <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="quant[3]">
+                                                        <span class="fa-minus fa"></span>
+                                                    </button>
+                                                </span>
+                                                <input type="text" name="quant[3]" id="ManualMistakeQuantity" class="form-control input-number" value="1" min="1" max="100">
+                                                <span class="input-group-btn">
+                                                    <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[3]">
+                                                        <span class="fa-plus fa"></span>
+                                                    </button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <button type="button" id="ManualMistakeQuantityButton" class="btn btn-primary">
+                                                <i class="fa fa-dot-circle-o"></i> Add
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input asp-for="ManualMistakeString" class="form-control" type="text" />
+                                        @*<input type="text" class="form-control" id="tokenfield-typeahead" value="blue" placeholder="Type something and hit enter" />*@
+                                        @*<select multiple="" asp-for="ManualMistakeIds" asp-items="@Model.ManualMistake" class="form-control"></select>*@
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-2">
+                                    <label for="select">Kiểm tra bằng thiết bị</label>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="form-group row col-md-12">
+                                        <div class="col-md-8">
+                                            <input id="DeviceMistakeSelect" class="form-control tagsinput" data-role="tagsinput" />
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="input-group">
+                                                <span class="input-group-btn">
+                                                    <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="quant[2]">
+                                                        <span class="fa-minus fa"></span>
+                                                    </button>
+                                                </span>
+                                                <input type="text" name="quant[2]" id="DeviceMistakeQuantity" class="form-control input-number" value="1" min="1" max="100">
+                                                <span class="input-group-btn">
+                                                    <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[2]">
+                                                        <span class="fa-plus fa"></span>
+                                                    </button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <button type="button" id="DeviceMistakeQuantityButton" class="btn btn-primary">
+                                                <i class="fa fa-dot-circle-o"></i> Add
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input asp-for="DeviceMistakeString" class="form-control" data-role="tagsinput" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 form-control-label textright" for="email-input">Khách hàng góp ý</label>
+                                <div class="col-md-10">
+                                    <input asp-for="CustomerComment" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button type="submit" id="btnSubmit" class="btn btn-sm btn-primary">
+                                    <i class="fa fa-dot-circle-o"></i> Next
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- /.conainer-fluid -->
+@section scripts
+    {
+    <link href="~/lib/jquery-ui/themes/base/jquery-ui.css" rel="stylesheet" />
+
+
+    <script src="~/lib/jquery-ui/jquery-ui.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#ThirdPartyDate").datepicker();
+
+            //Displaying ThirdPartyDate when IsThridParty is true. However, this regulation was canceled. style="display:none" was assigned to divDate
+            //$('#IsThirdParty').click(function () {
+            //    $("#divDate").toggle(this.checked);
+            //});
+            
+            $("#ManualMistakeQuantityButton").prop('disabled', true);
+            $("#DeviceMistakeQuantityButton").prop('disabled', true);
+            $("#ManualMistakeSelect").autocomplete({
+                source: function (req, resp) {
+                    $.ajax({
+                        url: "/Inspection/GetManualMistakeByPrefix",
+                        type: "POST",
+                        dataType: "json",
+                        data: { prefix: GetCurrentSearchTerm(req.term) },
+                        success: function (data) {
+                            resp($.map(data, function (item) {
+                                return { label: item.name, value: item.name };
+                            }))
+
+                        }
+                    })
+                },
+
+                select: function (event, ui) {
+                    //var LastValue = splitCurrentText(this.value);
+                    //LastValue.pop();
+                    //LastValue.push(ui.item.value);
+                    //LastValue.push("");
+                    //this.value = LastValue.join(",");
+                    this.value = ui.item.value;
+                    $("#ManualMistakeQuantityButton").prop('disabled', false);
+                    return false;
+                },
+                focus: function () {
+                    return false;
+                }
+            });
+
+            $("#ManualMistakeQuantityButton").click(function () {
+                var LastValue = splitCurrentText($("#ManualMistakeString").val());
+                LastValue.pop();
+                LastValue.push($("#ManualMistakeSelect").val() + "{" + $("#ManualMistakeQuantity").val() + "}");
+                LastValue.push("");
+                $("#ManualMistakeString").val(LastValue.join("|"));
+
+                $("#ManualMistakeSelect").val("");
+                $("#ManualMistakeQuantity").val("1");
+                $("#ManualMistakeQuantityButton").prop('disabled', true);
+            });
+
+            $("#DeviceMistakeSelect").autocomplete({
+                source: function (req, resp) {
+                    $.ajax({
+                        url: "/Inspection/GetDeviceMistakeByPrefix",
+                        type: "POST",
+                        dataType: "json",
+                        data: { prefix: GetCurrentSearchTerm(req.term) },
+                        success: function (data) {
+                            resp($.map(data, function (item) {
+                                return { label: item.name, value: item.name };
+                            }))
+
+                        }
+                    })
+                },
+
+                select: function (event, ui) {
+                    this.value = ui.item.value;
+                    $("#DeviceMistakeQuantityButton").prop('disabled', false);
+                    return false;
+                },
+                focus: function () {
+                    return false;
+                }
+            });
+
+            $("#DeviceMistakeQuantityButton").click(function () {
+                var LastValue = splitCurrentText($("#DeviceMistakeString").val());
+                LastValue.pop();
+                LastValue.push($("#DeviceMistakeSelect").val() + "{" + $("#DeviceMistakeQuantity").val() + "}");
+                LastValue.push("");
+                $("#DeviceMistakeString").val(LastValue.join("|"));
+                $("#DeviceMistakeSelect").val("");
+                $("#DeviceMistakeQuantity").val("1");
+                $("#DeviceMistakeQuantityButton").prop('disabled', true);
+            });
+
+            function splitCurrentText(LastTerm) {
+
+                //return LastTerm.split(/,\s*/);
+                return LastTerm.split("|");
+            }
+
+            function GetCurrentSearchTerm(LastTerm) {
+
+                return splitCurrentText(LastTerm).pop();
+            }
+        });
+
+
+        //plugin bootstrap minus and plus
+        $('.btn-number').click(function (e) {
+            e.preventDefault();
+
+            fieldName = $(this).attr('data-field');
+            type = $(this).attr('data-type');
+            var input = $("input[name='" + fieldName + "']");
+            var currentVal = parseInt(input.val());
+            if (!isNaN(currentVal)) {
+                if (type == 'minus') {
+
+                    if (currentVal > input.attr('min')) {
+                        input.val(currentVal - 1).change();
+                    }
+                    if (parseInt(input.val()) == input.attr('min')) {
+                        $(this).attr('disabled', true);
+                    }
+
+                } else if (type == 'plus') {
+
+                    if (currentVal < input.attr('max')) {
+                        input.val(currentVal + 1).change();
+                    }
+                    if (parseInt(input.val()) == input.attr('max')) {
+                        $(this).attr('disabled', true);
+                    }
+
+                }
+            } else {
+                input.val(0);
+            }
+        });
+        $('.input-number').focusin(function () {
+            $(this).data('oldValue', $(this).val());
+        });
+        $('.input-number').change(function () {
+
+            minValue = parseInt($(this).attr('min'));
+            maxValue = parseInt($(this).attr('max'));
+            valueCurrent = parseInt($(this).val());
+
+            name = $(this).attr('name');
+            if (valueCurrent >= minValue) {
+                $(".btn-number[data-type='minus'][data-field='" + name + "']").removeAttr('disabled')
+            } else {
+                alert('Sorry, the minimum value was reached');
+                $(this).val($(this).data('oldValue'));
+            }
+            if (valueCurrent <= maxValue) {
+                $(".btn-number[data-type='plus'][data-field='" + name + "']").removeAttr('disabled')
+            } else {
+                alert('Sorry, the maximum value was reached');
+                $(this).val($(this).data('oldValue'));
+            }
+
+
+        });
+        $(".input-number").keydown(function (e) {
+            // Allow: backspace, delete, tab, escape, enter and .
+            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
+                // Allow: Ctrl+A
+                (e.keyCode == 65 && e.ctrlKey === true) ||
+                // Allow: home, end, left, right
+                (e.keyCode >= 35 && e.keyCode <= 39)) {
+                // let it happen, don't do anything
+                return;
+            }
+            // Ensure that it is a number and stop the keypress
+            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                e.preventDefault();
+            }
+        });
+
+        $(function () {
+            $('#btnSubmit').click(function (e) {
+                e.preventDefault();
+                var resultValue = $('#Result option:selected').val()
+                if (resultValue == "2") {
+                    if (confirm('Do you want to reject this item?')) {
+                        $('#inspectionForm').submit();
+                    } else {
+                        alert('Why did you press cancel? You should have confirmed');
+                    }
+                }
+                else {
+                    $('#inspectionForm').submit();
+                }
+
+            });
+
+
+        });
+
+
+    </script>
+}

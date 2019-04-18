@@ -1,0 +1,224 @@
+﻿@model InspectionListViewModel
+@using Artoo.Common;
+<!-- Breadcrumb -->
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a href="#">Home</a>
+    </li>
+    <li class="breadcrumb-item active">Inspection Report</li>
+</ol>
+
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fa fa-align-justify"></i>
+                        <strong>Inspection Report</strong>
+                    </div>
+                    <div class="card-body">
+                        <form asp-controller="Inspection" asp-action="Report" method="get" class="inlinesearch">
+                            <div class="row">
+                                <div class="form-group col-md-2">
+                                    <label for="exampleInputEmail2" class="lablesearch">Factory </label>
+                                    <select asp-items="@Model.FactoryList" name="factoryString" asp-for="@Model.FactorySearchString" class="form-control">
+                                        <option value="0">Please select</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label for="exampleInputEmail2" class="lablesearch">Week </label>
+                                    <select asp-items="@Model.FinalWeekList" name="weekString" asp-for="@Model.FinalWeekSearchString" class="form-control">
+                                        <option value="0">Please select</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label for="exampleInputEmail2" class="lablesearch">Result </label>
+                                    <select asp-items="@Model.ResultList" name="resultString" asp-for="@Model.ResultSearchString" class="form-control">
+                                        <option value="0">Please select</option>
+                                    </select>
+                                </div>
+                                @*<div class="form-group col-md-3">
+                                        <label for="exampleInputName2" class="lablesearch">Kĩ thuật trưởng </label>
+                                        <input type="text" value="@Model.TechManagerNameSearchString" name="techManagerString" class="form-control" placeholder="Kĩ thuật trưởng">
+                                    </div>*@
+                                <div class="form-group col-md-3">
+                                    <label for="exampleInputName2" class="lablesearch">Order Number </label>
+                                    <input type="text" value="@Model.OrderNumberSearchString" name="orderString" class="form-control" placeholder="Order Number">
+                                </div>
+
+                                <div class="form-group col-md-2">
+                                    <label for="exampleInputName2" class="lablesearch">. </label>
+                                    <span class="input-group-btn lablesearch">
+                                        <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> Search</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </form>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Factory</th>
+                                    <th>Kĩ thuật trưởng</th>
+                                    <th>Người kiểm</th>
+                                    @*<th>Passion brand</th>*@
+                                    <th>3rd Party</th>
+                                    <th>Order No</th>
+                                    <th>Lỗi kiểm tra bằng tay và mắt</th>
+                                    <th>Lỗi Kiểm tra bằng thiết bị </th>
+                                    <th>Kết quả</th>
+                                    <th>Approve</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.InspectionList)
+                                {
+                                    <tr>
+                                        <td>@item.FactoryName</td>
+                                        <td>@item.TechManagerName</td>
+                                        <td>@item.Username</td>
+                                        @*<td>@item.PassionBrandName</td>*@
+                                        <td>
+                                            @if (item.IsThirdParty == true)
+                                            {
+                                                <img src="~/img/yes-icon.png" width="30" alt="yes" />
+                                            }
+                                            else
+                                            {
+                                                <img src="~/img/no-icon.png" width="25" alt="yes" />
+                                            }
+                                        </td>
+                                        <td>@item.OrderNumber</td>
+                                        <td>
+                                            <ul>
+                                                @foreach (var mistake in item.ManualMistakeList)
+                                                {
+                                                    <li>
+                                                        @mistake.Name (@mistake.Quantity)
+                                                        <br />
+                                                    </li>
+                                                }
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                @foreach (var mistake in item.DeviceMistakeList)
+                                                {
+                                                    <li>
+                                                        @mistake.Name (@mistake.Quantity)
+                                                        <br />
+                                                    </li>
+                                                }
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            @if (item.Result == (int)InspectionResultEnum.Accept)
+                                            {
+                                                <span class="badge badge-success">@item.ResultString</span>
+                                            }
+                                            else if (item.Result == (int)InspectionResultEnum.Reject)
+                                            {
+                                                <span class="badge badge-danger">@item.ResultString</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(item.ApproveUsername))
+                                            {
+                                                @*<a asp-controller="Inspection" asp-action="ReportApprove" class="btn btn-warning btn-sm" asp-route-id="@item.InspectionId">@item.ApproveUsername</a>*@
+                                                <a class="btn btn-warning btn-sm">@item.ApproveUsername</a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-controller="Inspection" asp-action="ReportApprove" asp-route-id="@item.InspectionId" class="btn btn-success btn-sm" asp-route-page="@Model.Page.CurrentPage" asp-route-factoryString="@Model.FactorySearchString" asp-route-orderString="@Model.OrderNumberSearchString" asp-route-weekString="@Model.FinalWeekSearchString" asp-route-techManagerString="@Model.TechManagerNameSearchString" asp-route-resultString="@Model.ResultSearchString" asp-route-pageTotal="@Model.Page.PageCount">Approve</a>
+                                            }
+                                            <a asp-controller="Pdf" asp-action="PrintPdf" asp-route-id="@item.InspectionId" class="btn btn-danger btn-sm">Pdf</a>
+                                            @*<a asp-controller="SendEmail" asp-action="SendInsepectionEmail" asp-route-id="@item.InspectionId" class="btn btn-danger btn-sm">Send Email</a>*@
+                                        </td>
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                        <ul class="pagination">
+                            <li class="page-item">
+                                @if (@Model.Page.PreviousPage == 1)
+                                {
+                                    <a>Prev</a>
+                                }
+                                else
+                                {
+                                    <a asp-controller="Inspection" asp-action="Report" class="page-link" asp-route-page="@Model.Page.PreviousPage" asp-route-factoryString="@Model.FactorySearchString" asp-route-orderString="@Model.OrderNumberSearchString" asp-route-weekString="@Model.FinalWeekSearchString" asp-route-techManagerString="@Model.TechManagerNameSearchString" asp-route-resultString="@Model.ResultSearchString">Prev</a>
+                                }
+                            </li>
+                            @if (Model.Page.PageCount > 10)
+                            {
+                                var maxPage = Model.Page.CurrentPage + 5 > Model.Page.PageCount ? Model.Page.PageCount : Model.Page.CurrentPage + 5;
+                                var minPage = Model.Page.CurrentPage - 5 < 1 ? 1 : Model.Page.CurrentPage - 5;
+                                @for (int i = minPage; i <= maxPage; i++)
+                                {
+                                    if (Model.Page.CurrentPage == i)
+                                    {
+                                        <li class="page-item active">
+                                            <a>@i</a>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li class="page-item">
+                                            <a asp-controller="Inspection" asp-action="Report" class="page-link" asp-route-page="@i" asp-route-factoryString="@Model.FactorySearchString" asp-route-orderString="@Model.OrderNumberSearchString" asp-route-weekString="@Model.FinalWeekSearchString" asp-route-techManagerString="@Model.TechManagerNameSearchString" asp-route-resultString="@Model.ResultSearchString">@i</a>
+                                        </li>
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                @for (int i = 1; i <= Model.Page.PageCount; i++)
+                                {
+                                    if (Model.Page.CurrentPage == i)
+                                    {
+                                        <li class="page-item active">
+                                            <a>@i</a>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li class="page-item">
+                                            <a asp-controller="Inspection" asp-action="Report" class="page-link" asp-route-page="@i" asp-route-factoryString="@Model.FactorySearchString" asp-route-orderString="@Model.OrderNumberSearchString" asp-route-weekString="@Model.FinalWeekSearchString" asp-route-techManagerString="@Model.TechManagerNameSearchString" asp-route-resultString="@Model.ResultSearchString">@i</a>
+                                        </li>
+                                    }
+                                }
+
+                            }
+                            <li class="page-item">
+                                @if (@Model.Page.NextPage == Model.Page.PageCount)
+                                {
+                                    <a>Next</a>
+                                }
+                                else
+                                {
+                                    <a asp-controller="Inspection" asp-action="Report" class="page-link" asp-route-page="@Model.Page.NextPage" asp-route-factoryString="@Model.FactorySearchString" asp-route-orderString="@Model.OrderNumberSearchString" asp-route-weekString="@Model.FinalWeekSearchString" asp-route-techManagerString="@Model.TechManagerNameSearchString" asp-route-resultString="@Model.ResultSearchString">Next</a>
+                                }
+                            </li>
+                            @*@for (int i = 1; i <= Model.Page.PageCount; i++)
+                                {
+                                    if (Model.Page.CurrentPage == i)
+                                    {
+                                        <li class="page-item active">
+                                            <a>@i</a>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li class="page-item">
+                                            <a asp-controller="Inspection" asp-action="Report" class="page-link" asp-route-id="@i">@i</a>
+                                        </li>
+                                    }
+                                }*@
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.conainer-fluid -->
+    </div>
+</div>

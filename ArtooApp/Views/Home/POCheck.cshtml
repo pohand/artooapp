@@ -1,0 +1,65 @@
+﻿@model List<NumberOfPONeedCheckViewModel>
+<!-- Breadcrumb -->
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a href="#">Home</a>
+    </li>
+    <li class="breadcrumb-item active">Number of PO need to inspect in this week</li>
+</ol>
+
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fa fa-align-justify"></i>
+                        <strong>Number of PO need to inspect in this week</strong>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Factory</th>
+                                    <th>Blocking Rate (%)</th>
+                                    <th>Total PO</th>
+                                    <th>Number of PO need to inspect</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                <tr>
+                                    <td>@item.FactoryName</td>
+                                    <td>@item.BlockingRate</td>
+                                    <td>@item.TotalPO</td>
+                                    <td>@item.NumberOfPONeedToCheck</td>
+                                </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                        @*<ul class="pagination">
+                                @for (int i = 1; i <= Model.Page.PageCount; i++)
+                                {
+                                    if (Model.Page.CurrentPage == i)
+                                    {
+                                        <li class="page-item active">
+                                            <a asp-controller="Inspection" asp-action="Index" class="page-link" asp-route-id="@i">@i</a>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li class="page-item">
+                                            <a asp-controller="Inspection" asp-action="Index" class="page-link" asp-route-id="@i">@i</a>
+                                        </li>
+                                    }
+                                }
+                            </ul>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.conainer-fluid -->
+    </div>
+</div>

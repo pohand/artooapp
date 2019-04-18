@@ -1,0 +1,306 @@
+﻿@model DashboardViewModel
+<!-- Breadcrumb -->
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">Home</li>
+    <li class="breadcrumb-item active">Dashboard</li>
+</ol>
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="card text-white bg-primary">
+                    <div class="card-body pb-0">
+                        <div class="btn-group float-right">
+                            <button type="button" class="btn btn-transparent dropdown-toggle p-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="icon-settings"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a asp-controller="Home" asp-action="BlockingRate" class="dropdown-item">Detail</a>
+                                @*<a class="dropdown-item" href="#">Detail</a>*@
+                            </div>
+                        </div>
+                        <h4 class="mb-0">@Model.BlokingRate.BlockingRate %</h4>
+                        <p>Blocking Rate (BR)</p>
+                    </div>
+                    <div class="chart-wrapper px-3" style="height:70px;">
+                        <ul>
+                            @foreach (var item in Model.BlockingRateList.BlockingRateList)
+                            {
+                                <li>
+                                    @item.FactoryName : @item.BlockingRate %
+                                </li>
+                            }
+                        </ul>
+                        @*<canvas id="card-chart1" class="chart" height="70"></canvas>*@
+                    </div>
+                </div>
+            </div>
+            <!--/.col-->
+            <div class="col-sm-3">
+                <div class="card text-white bg-warning">
+                    <div class="card-body pb-0">
+                        <div class="btn-group float-right">
+                            <button type="button" class="btn btn-transparent dropdown-toggle p-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="icon-settings"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a class="dropdown-item">Action</a>
+                            </div>
+                        </div>
+                        <h4 class="mb-0">@Model.DPM.DPMValue</h4>
+                        <p>Defect Per Million (DPM)</p>
+                    </div>
+                    <div class="chart-wrapper px-3" style="height:70px;">
+                        <ul>
+                            @foreach (var item in Model.DPMList.DPMList)
+                            {
+                                <li>
+                                    @item.FactoryName : @item.DPMValue
+                                </li>
+                            }
+                        </ul>
+                        @*<canvas id="card-chart1" class="chart" height="70"></canvas>*@
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-3">
+                <div class="card text-white bg-danger">
+                    <div class="card-body pb-0">
+                        <div class="btn-group float-right">
+                            <button type="button" class="btn btn-transparent dropdown-toggle p-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="icon-settings"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a asp-controller="Home" asp-action="POCheck" class="dropdown-item">Detail</a>
+                                @*<a class="dropdown-item" >Detail</a>*@
+                            </div>
+                        </div>
+                        <h4 class="mb-0">@Model.NumberPONeedToInspect</h4>
+                        <p>POs need to check</p>
+                    </div>
+                    <div class="chart-wrapper px-3" style="height:70px;">
+                        <ul>
+                            @foreach (var item in Model.NumberOfPONeedToCheckList)
+                            {
+                                <li>
+                                    @item.FactoryName : @item.NumberOfPONeedToCheck
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-3">
+                <div class="card text-white bg-success">
+                    <div class="card-body pb-0">
+                        <div class="btn-group float-right">
+                            <button type="button" class="btn btn-transparent dropdown-toggle p-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="icon-settings"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a asp-controller="Inspection" asp-action="RejectList" class="nav-link">Detail</a>
+                            </div>
+                        </div>
+                        <h4 class="mb-0">@TempData["RejectCount"]</h4>
+                        <p>Số lượng PO bị reject</p>
+                    </div>
+                    <div class="chart-wrapper px-3" style="height:70px;">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!--/.row-->
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            Blocking Rate
+        </div>
+        <div class="card-body">
+            <!--/.row-->
+            <div class="chart-wrapper" style="height:300px;margin-top:40px;">
+                <canvas id="main-chart" class="chart" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+    <!--/.card-->
+    <div>
+        <div class="card">
+            <div class="card-header">
+                DPM
+            </div>
+            <div class="card-body">
+                <div class="chart-wrapper">
+                    <canvas id="canvas-3"></canvas>
+                </div>
+            </div>
+        </div>
+        <!--/.card-->
+        <div class="card">
+            <div class="card-header">
+                POs need to check in this week
+                @*<div class="card-actions">
+                        <a asp-controller="Home" asp-action="POCheck" class="dropdown-item">
+                            <small class="text-muted">details</small>
+                        </a>
+                    </div>*@
+            </div>
+            <div class="card-body">
+                <div class="chart-wrapper">
+                    <canvas id="canvas-5"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.conainer-fluid -->
+
+@section scripts
+    {
+    <script type="text/javascript">
+        //convert Hex to RGBA
+        function convertHex(hex, opacity) {
+            hex = hex.replace('#', '');
+            var r = parseInt(hex.substring(0, 2), 16);
+            var g = parseInt(hex.substring(2, 4), 16);
+            var b = parseInt(hex.substring(4, 6), 16);
+
+            var result = 'rgba(' + r + ',' + g + ',' + b + ',' + opacity / 100 + ')';
+            return result;
+        }
+
+        //Random Numbers
+        function random(min, max) {
+            return Math.floor(Math.random() * (max - min + 1) + min);
+        }
+
+        //Main Chart
+        var elements = "@ViewBag.Data".split(',');
+        var data1 = elements;
+        var data3 = [];
+        for (var i = 0; i <= 12; i++) {
+            data3.push(5);
+        }
+
+        var label = "@ViewBag.Label".split(',');
+        var data = {
+            labels: label,//['M', 'T', 'W', 'T', 'F', 'S', 'S', 'M', 'T', 'W', 'T', 'F'],
+            datasets: [
+                {
+                    label: 'Blocking Rate',
+                    backgroundColor: convertHex($.brandInfo, 10),
+                    borderColor: $.brandInfo,
+                    pointHoverBackgroundColor: '#fff',
+                    borderWidth: 2,
+                    data: data1
+                }
+                ,
+                {
+                    label: 'Target',
+                    backgroundColor: 'transparent',
+                    borderColor: $.brandDanger,
+                    pointHoverBackgroundColor: '#fff',
+                    borderWidth: 1,
+                    borderDash: [8, 5],
+                    data: data3
+                }
+            ]
+        };
+
+        var options = {
+            maintainAspectRatio: false,
+            legend: {
+                display: true
+            },
+            scales: {
+                xAxes: [{
+                    gridLines: {
+                        drawOnChartArea: true,
+                    }
+                }],
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        maxTicksLimit: 5,
+                        stepSize: Math.ceil(25 / 5),
+                        max: 25
+                    }
+                }]
+            },
+            elements: {
+                point: {
+                    radius: 2,
+                    hitRadius: 10,
+                    hoverRadius: 4,
+                    hoverBorderWidth: 3,
+                }
+            },
+        };
+        var ctx = $('#main-chart');
+        var mainChart = new Chart(ctx, {
+            type: 'line',
+            data: data,
+            options: options
+        });
+
+        //doughnut Chart
+        var DPMLabels = "@ViewBag.DPMFactoryLabels".split(',');
+        var DPMData = "@ViewBag.DPMData".split(',')
+        var doughnutData = {
+            labels: DPMLabels,
+            datasets: [{
+                data: DPMData,
+                backgroundColor: [
+                    '#FF6384',
+                    '#36A2EB',
+                    '#FFCE56'
+                ],
+                hoverBackgroundColor: [
+                    '#FF6384',
+                    '#36A2EB',
+                    '#FFCE56'
+                ]
+            }]
+        };
+        var ctx = document.getElementById('canvas-3');
+        var chart = new Chart(ctx, {
+            type: 'doughnut',
+            data: doughnutData,
+            options: {
+                responsive: true
+            }
+        });
+
+        //Pie Chart
+        var factoryLabels = "@ViewBag.FactoryLabels".split(',');
+        var poData = "@ViewBag.PoData".split(',')
+        var pieData = {
+            labels: factoryLabels,
+            datasets: [{
+                data: poData,
+                backgroundColor: [
+                    '#FF6384',
+                    '#36A2EB',
+                    '#FFCE56'
+                ],
+                hoverBackgroundColor: [
+                    '#FF6384',
+                    '#36A2EB',
+                    '#FFCE56'
+                ]
+            }]
+        };
+        var ctx = document.getElementById('canvas-5');
+        var chart = new Chart(ctx, {
+            type: 'pie',
+            data: pieData,
+            options: {
+                responsive: true
+            }
+        });
+
+    </script>
+}

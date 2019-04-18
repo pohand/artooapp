@@ -1,0 +1,53 @@
+﻿@model EmailRuleViewModel
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a href="#">Home</a>
+    </li>
+    <li class="breadcrumb-item active">Email</li>
+</ol>
+
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <strong>Email</strong>
+                    </div>
+                    <form asp-action="Create" method="post" class="form-horizontal" role="form">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <div asp-validation-summary="All" class="text-danger"></div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 form-control-label" for="text-input">Passion Brand</label>
+                                <div class="col-md-9">
+                                    <select asp-for="PassionBrandId" asp-items="@Model.PassionBrands" class="form-control"></select>
+                                    <span asp-validation-for="PassionBrandId" class="help-block"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 form-control-label" for="text-input">Inspection Result</label>
+                                <div class="col-md-9">
+                                    <select  asp-for="Result" asp-items="@Model.ResultList" class="form-control"></select>
+                                    <span asp-validation-for="Result" class="help-block"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 form-control-label" for="text-input">Email Address</label>
+                                <div class="col-md-9">
+                                    @*<select asp-for="EmailId" asp-items="@Model.Emails" class="form-control"></select>*@
+                                    <select multiple="" asp-for="EmailIds" asp-items="@Model.Emails" class="form-control"></select>
+                                    <span asp-validation-for="EmailId" class="help-block"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Add</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

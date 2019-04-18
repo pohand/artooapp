@@ -1,0 +1,128 @@
+﻿@model MistakeListViewModel
+<!-- Breadcrumb -->
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a href="#">Home</a>
+    </li>
+    <li class="breadcrumb-item active">Danh sách lỗi</li>    
+</ol>
+
+
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fa fa-align-justify"></i>
+                        <strong>Lỗi kiểm tra bằng tay và mắt</strong>
+                        @if (!string.IsNullOrEmpty(ViewBag.message))
+                        {
+                            <span class="badge badge-success float-right">@ViewBag.message</span>
+                        }
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Date registered</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.ManualMistakes)
+                                {
+                                    <tr>
+                                        <td>@item.Name</td>
+                                        <td>@item.DateRegister.ToString("d")</td>
+                                        <td>
+                                            <a asp-controller="Mistake" asp-action="Details" class="btn btn-sm btn-success" asp-route-id="@item.MistakeId">Detail</a>
+                                            <a asp-action="Delete" asp-route-id="@item.MistakeId" class="btn btn-sm btn-danger">Delete</a>
+                                        </td>
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                        <ul class="pagination">
+                            @for (int i = 1; i <= Model.ManualMistakePage.PageCount; i++)
+                            {
+                                if (Model.ManualMistakePage.CurrentPage == i)
+                                {
+                                    <li class="page-item active">
+                                        <a>@i</a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="page-item">
+                                        <a href="~/Mistake?manual=@i&device=@Model.DeviceMistakePage.CurrentPage">@i</a>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <a asp-controller="Mistake" asp-action="Create" class="btn btn-sm btn-primary float-right"><i class="fa fa-dot-circle-o"></i> Add</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fa fa-align-justify"></i>
+                        <strong>Lỗi kiểm tra bằng thiết bị</strong>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Date registered</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.DeviceMistakes)
+                                {
+                                    <tr>
+                                        <td>@item.Name</td>
+                                        <td>@item.DateRegister.ToString("d")</td>
+                                        <td>
+                                            <a asp-controller="Mistake" asp-action="Details" class="btn btn-sm btn-success" asp-route-id="@item.MistakeId">Detail</a>
+                                            <a asp-action="Delete" asp-route-id="@item.MistakeId" class="btn btn-sm btn-danger">Delete</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        <ul class="pagination">
+                            @for (int j = 1; j <= Model.DeviceMistakePage.PageCount; j++)
+                            {
+                                if (Model.DeviceMistakePage.CurrentPage == j)
+                                {
+                                    <li class="page-item active">
+                                        <a>@j</a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="page-item">
+                                        <a href="~/Mistake?manual=@Model.ManualMistakePage.CurrentPage&device=@j">@j</a>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <a asp-controller="Mistake" asp-action="Create" asp-route-type="1" class="btn btn-sm btn-primary float-right"><i class="fa fa-dot-circle-o"></i> Add</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.conainer-fluid -->
+    </div>
+</div>

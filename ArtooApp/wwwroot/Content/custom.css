@@ -1,0 +1,32 @@
+﻿.file {
+    visibility: hidden;
+    position: absolute;
+}
+
+.textright {
+    text-align: right;
+}
+
+.ordertypehighlight {
+    color: darkorange;
+    font-weight: bold;
+}
+
+.lablesearch{
+    margin-left: 20px;
+    margin-right: 10px;
+}
+
+.inlinesearch{
+    margin-bottom: 5px;
+}
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    

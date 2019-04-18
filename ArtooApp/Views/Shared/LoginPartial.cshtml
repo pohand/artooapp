@@ -1,0 +1,42 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Identity.EntityFrameworkCore
+
+@inject SignInManager<ApplicationUser> SignInManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <form asp-area="" asp-controller="Account" asp-action="Logout" id="logoutForm"
+          method="post" class="navbar-right">
+        @*<ul class="nav navbar-nav navbar-right">
+                <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+            </ul>*@
+        <a class="nav-link dropdown-toggle nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+            <span class="d-md-down-none">@User.Identity.Name</span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right">
+            <div class="dropdown-header text-center">
+                <strong>Account</strong>
+            </div>
+            <a class="dropdown-item " href="javascript:document.getElementById('logoutForm').submit()" role="button" aria-haspopup="true" aria-expanded="false">
+                <span class="d-md-down-none"><i class="fa fa-lock"></i>Logout</span>
+            </a>
+        </div>
+        
+    </form>
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        @*<li>
+                <a class="nav-link" id="registerLink" asp-controller="Account" asp-action="Register" role="button" aria-haspopup="true" aria-expanded="false">
+                    <span class="d-md-down-none">Register</span>
+                </a>
+            </li>*@
+        <li>
+            <a class="nav-link" id="loginLink" asp-controller="Account" asp-action="Login" role="button" aria-haspopup="true" aria-expanded="false">
+                <span class="d-md-down-none">Log in</span>
+            </a>
+        </li>
+    </ul>
+}
+

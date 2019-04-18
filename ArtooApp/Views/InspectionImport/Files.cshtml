@@ -1,0 +1,18 @@
+﻿@model  Artoo.Models.FileInputModel.FilesViewModel
+
+<p>List of Files</p>
+
+<ul>
+    @foreach (var item in Model.Files)
+    {
+        <li>
+            <a asp-action="Download"
+               asp-route-filename="@item.Name">
+                @item.Name
+            </a>
+        </li>
+        <li>
+            <a asp-action="Remove" asp-route-filename="@item.Name">Delete</a>
+        </li>
+    }
+</ul>

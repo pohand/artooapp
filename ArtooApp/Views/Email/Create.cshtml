@@ -1,0 +1,51 @@
+﻿@model Email
+<!-- Breadcrumb -->
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a href="#">Home</a>
+    </li>
+    <li class="breadcrumb-item active">Email</li>
+</ol>
+
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <strong>Email</strong>
+                    </div>
+                    <form asp-action="Create" method="post" class="form-horizontal" role="form">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <div asp-validation-summary="All" class="text-danger"></div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="EmailAddress" class="col-md-3 form-control-label" for="text-input">Email Address</label>
+                                <div class="col-md-9">
+                                    <input asp-for="EmailAddress" class="form-control" placeholder="Email Address" />
+                                    <span asp-validation-for="EmailAddress" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="FirstName" class="col-md-3 form-control-label" for="text-input">First Name</label>
+                                <div class="col-md-9">
+                                    <input asp-for="FirstName" class="form-control" placeholder="First Name" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="LastName" class="col-md-3 form-control-label" for="text-input">Last Name</label>
+                                <div class="col-md-9">
+                                    <input asp-for="LastName" class="form-control" placeholder="Last Name" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Add</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

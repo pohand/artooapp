@@ -1,0 +1,42 @@
+﻿@model PassionBrand
+<!-- Breadcrumb -->
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a href="#">Home</a>
+    </li>
+    <li class="breadcrumb-item active">Passion Brand</li>
+</ol>
+
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <strong>Passion Brand</strong>
+                    </div>
+                    <form asp-action="Create" method="post" class="form-horizontal" role="form">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label asp-for="Name" class="col-md-3 form-control-label" for="text-input">Tên</label>
+                                <div class="col-md-9">
+                                    <input asp-for="Name" class="form-control" placeholder="Tên brand" />
+                                    <span asp-validation-for="Name" class="help-block"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="Description" class="col-md-3 form-control-label" for="text-input">Mô tả</label>
+                                <div class="col-md-9">
+                                    <input asp-for="Description" class="form-control" placeholder="Mô tả" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Add</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,60 @@
+﻿@model LoginViewModel
+@{
+    Layout = "";
+}
+<html>
+<head>
+    <title>Artoo</title>
+    <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/lib/simple-line-icons/css/simple-line-icons.css" rel="stylesheet" />
+
+    <link href="~/Content/style.css" rel="stylesheet" />
+
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/lib/tether/dist/js/tether.min.js"></script>
+</head>
+<body class="app flex-row align-items-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card-group mb-0">
+                    <div class="card p-4">
+                        <div class="card-body">
+                            <form asp-controller="Account" asp-action="Login" method="post" class="form-horizontal" role="form">
+                                <h1>Login</h1>
+                                <p class="text-muted">Sign In to your account</p>
+                                <input type="hidden" asp-for="ReturnUrl" />
+                                <div asp-validation-summary="All" class="text-danger"></div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-addon">
+                                        <i class="icon-user"></i>
+                                    </span>
+                                    <input asp-for="UserName" class="form-control" type="text" placeholder="Username" />
+                                    <span asp-validation-for="UserName" class="text-danger"></span>
+                                </div>
+                                <div class="input-group mb-4">
+                                    <span class="input-group-addon">
+                                        <i class="icon-lock"></i>
+                                    </span>
+                                    <input asp-for="Password" class="form-control" placeholder="Password" type="password" />
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <input type="submit" class="btn btn-primary px-4" value="Log in" />
+                                    </div>
+                                    <div class="col-6 text-right">
+                                        <button type="button" class="btn btn-link px-0">Forgot password?</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

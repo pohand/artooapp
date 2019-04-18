@@ -1,0 +1,359 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro">
+    @*<link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />*@
+    @*<link href="~/Content/site.css" rel="stylesheet" />*@
+    <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/lib/simple-line-icons/css/simple-line-icons.css" rel="stylesheet" />
+    <link href="~/Content/style.css" rel="stylesheet" />
+    <link href="~/Content/custom.css" rel="stylesheet" />
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/lib/tether/dist/js/tether.min.js"></script>
+    <script src="~/lib/PACE/pace.min.js"></script>
+
+    <script src="~/lib/chart.js/dist/Chart.min.js"></script>
+    <script src="~/js/app.js"></script>
+    @*<script src="~/js/views/main.js"></script>*@
+
+    <title>Artoo</title>
+</head>
+<body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
+    <header class="app-header navbar">
+        <button class="navbar-toggler mobile-sidebar-toggler d-lg-none" type="button">☰</button>
+        <a class="navbar-brand" href="#"></a>
+        <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button">☰</button>
+        <ul class="nav navbar-nav d-md-down-none">
+            <li class="nav-item px-3">
+                <a asp-controller="Home" asp-action="index" class="nav-link">Dashboard</a>
+            </li>
+            @if (User.IsInRole("Administrator"))
+            {
+                <li class="nav-item px-3">
+                    <a asp-controller="Account" asp-action="index" class="nav-link">
+                        Users
+                    </a>
+                </li>
+            }
+        </ul>
+        <ul class="nav navbar-nav ml-auto">
+            @*<li class="nav-item d-md-down-none">
+                @await Html.PartialAsync("RejectNotification")
+            </li>*@
+            <li class="nav-item dropdown">                
+                @await Html.PartialAsync("LoginPartial")
+            </li>
+            <li>
+                <button class="navbar-toggler aside-menu-toggler d-md-down-none" type="button">☰</button>
+            </li>
+        </ul>
+    </header>
+    <div class="app-body">
+        <div class="sidebar">
+            <nav class="sidebar-nav">
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a asp-controller="Home" asp-action="index" class="nav-link"><i class="icon-speedometer"></i> Dashboard <span class="badge badge-primary">NEW</span></a>
+                    </li>
+                    <li class="nav-title">
+                        Quality
+                    </li>
+                    @if (User.IsInRole("Administrator") || User.IsInRole("Manager") || User.IsInRole("QPL") || User.IsInRole("Factory Manager") || User.IsInRole("Decathlon Manager"))
+                    {
+                        <li class="nav-item">
+                            <a asp-controller="Inspection" asp-action="Index" class="nav-link">
+                                <i class="icon-pie-chart"></i> Waiting List
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a asp-controller="Inspection" asp-action="List" class="nav-link">
+                                <i class="icon-pie-chart"></i> Inspection List
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Inspection" asp-action="RejectList" class="nav-link">
+                                <i class="icon-pie-chart"></i> Inspection Reject
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Inspection" asp-action="Report" class="nav-link">
+                                <i class="icon-pie-chart"></i> Inspection Report
+                            </a>
+                        </li>
+                    }
+                    @if (User.IsInRole("Administrator") || User.IsInRole("Manager") || User.IsInRole("Factory Manager") || User.IsInRole("Decathlon Manager"))
+                    {
+                        <li class="nav-item">
+                            <a asp-controller="inspectionimport" asp-action="Index" class="nav-link">
+                                <i class="icon-pie-chart"></i> Import File
+                            </a>
+                        </li>
+                    }
+                    <li class="divider"></li>
+                    <li class="nav-title">
+                        Management
+                    </li>
+                    <li class="nav-item">
+                        <a asp-controller="workload" asp-action="Index" class="nav-link"><i class="icon-calculator"></i> Team Workload </a>
+                    </li>
+                    <li class="divider"></li>                    
+                    @if (User.IsInRole("Administrator"))
+                    {
+                        <li class="nav-title">
+                            Danh mục
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Mistake" asp-action="Index" class="nav-link">
+                                <i class="icon-pie-chart"></i> Danh sách lỗi
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="email" asp-action="Index" class="nav-link">
+                                <i class="icon-pie-chart"></i> Danh sách email
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="emailrule" asp-action="Index" class="nav-link">
+                                <i class="icon-pie-chart"></i> Email Rules
+                            </a>
+                        </li>
+                        @*<li class="nav-item">
+                                <a asp-controller="passionbrand" asp-action="Index" class="nav-link">
+                                    <i class="icon-pie-chart"></i> Passion Brand
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a asp-controller="manufacturer" asp-action="Index" class="nav-link">
+                                    <i class="icon-pie-chart"></i> Xưởng sản xuất
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href=".\account\index">
+                                    <i class="icon-pie-chart"></i> Danh sách User
+                                </a>
+                            </li>*@
+                    }
+
+                </ul>
+            </nav>
+        </div>
+        <!-- Main content -->
+        <main class="main">
+            @RenderBody()
+            <!-- /.conainer-fluid -->
+        </main>
+
+        <aside class="aside-menu">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#timeline" role="tab"><i class="icon-list"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#messages" role="tab"><i class="icon-speech"></i></a>
+                </li>                
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div class="tab-pane active" id="timeline" role="tabpanel">
+                    <div class="callout m-0 py-2 text-muted text-center bg-light text-uppercase">
+                        <small>
+                            <b>This week</b>
+                        </small>
+                    </div>
+                    <hr class="transparent mx-3 my-0">
+                    <div class="callout callout-warning m-0 py-3">
+                        <div class="avatar float-right">
+                            <img src="~/img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                        </div>
+                        <div>
+                            "Young teammate" communication problem from <strong>DECACS</strong>
+                        </div>
+                        <small class="text-muted mr-3"><i class="icon-calendar"></i>&nbsp; 1 - 3pm</small>
+                        <small class="text-muted"><i class="icon-location-pin"></i>&nbsp; DECACS</small>
+                    </div>
+                    <hr class="mx-3 my-0">
+                    <div class="callout callout-info m-0 py-3">
+                        <div class="avatar float-right">
+                            <img src="~/img/avatars/4.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                        </div>
+                        <div>
+                            DKT-BLUE defected PO from <strong>SMARTwarehouse</strong>
+                        </div>
+                        <small class="text-muted mr-3"><i class="icon-calendar"></i>&nbsp; 4 - 5pm</small>
+                        <small class="text-muted"><i class="icon-social-skype"></i>&nbsp; SMARTwarehouse</small>
+                    </div>
+                    <hr class="transparent mx-3 my-0">
+                    <div class="callout m-0 py-2 text-muted text-center bg-light text-uppercase">
+                        <small>
+                            <b>Next week</b>
+                        </small>
+                    </div>
+                    <hr class="transparent mx-3 my-0">
+                    <div class="callout callout-danger m-0 py-3">
+                        <div>
+                            OWE under target line 46 from 
+                            <strong>SMARTline</strong>
+                        </div>
+                        <small class="text-muted mr-3"><i class="icon-calendar"></i>&nbsp; 10 - 11pm</small>
+                        <small class="text-muted"><i class="icon-home"></i>&nbsp; creativeLabs HQ</small>
+                        <div class="avatars-stack mt-2">
+                            <div class="avatar avatar-xs">
+                                <img src="~/img/avatars/2.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                            </div>
+                            <div class="avatar avatar-xs">
+                                <img src="~/img/avatars/3.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                            </div>
+                            <div class="avatar avatar-xs">
+                                <img src="~/img/avatars/4.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                            </div>
+                            <div class="avatar avatar-xs">
+                                <img src="~/img/avatars/5.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                            </div>
+                            <div class="avatar avatar-xs">
+                                <img src="~/img/avatars/6.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="mx-3 my-0">
+                    <div class="callout callout-success m-0 py-3">
+                        <div>
+                            PO 456729999 is ready for Inspection from <strong>SMARTline</strong>
+                        </div>
+                        <small class="text-muted mr-3"><i class="icon-calendar"></i>&nbsp; 1 - 3pm</small>
+                        <small class="text-muted"><i class="icon-location-pin"></i>&nbsp; DN</small>
+                    </div>
+                    <hr class="mx-3 my-0">
+                    <div class="callout callout-primary m-0 py-3">
+                        <div>
+                            Lack of snap button for line 13, line 01 from <strong>SMARTaccessories</strong>
+                        </div>
+                        <small class="text-muted mr-3"><i class="icon-calendar"></i>&nbsp; 4 - 6pm</small>
+                        <small class="text-muted"><i class="icon-home"></i>&nbsp; creativeLabs HQ</small>
+                        <div class="avatars-stack mt-2">
+                            <div class="avatar avatar-xs">
+                                <img src="~/img/avatars/2.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                            </div>
+                            <div class="avatar avatar-xs">
+                                <img src="~/img/avatars/3.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                            </div>
+                            <div class="avatar avatar-xs">
+                                <img src="~/img/avatars/4.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                            </div>
+                            <div class="avatar avatar-xs">
+                                <img src="~/img/avatars/5.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                            </div>
+                            <div class="avatar avatar-xs">
+                                <img src="~/img/avatars/6.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                            </div>
+                            <div class="avatar avatar-xs">
+                                <img src="~/img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                            </div>
+                            <div class="avatar avatar-xs">
+                                <img src="~/img/avatars/8.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                            </div>
+                        </div>                        
+                    </div>
+                    <div class="callout callout-success m-0 py-3">
+                        <div>
+                            Hung Tran is asking for your support from <strong>Artoo</strong>
+                        </div>
+                        <small class="text-muted mr-3"><i class="icon-calendar"></i>&nbsp; 1 - 3pm</small>
+                        <small class="text-muted"><i class="icon-location-pin"></i>&nbsp; DN</small>
+                    </div>
+                    <hr class="mx-3 my-0">
+                </div>
+                <div class="tab-pane p-3" id="messages" role="tabpanel">
+                    <div class="message">
+                        <div class="py-3 pb-5 mr-3 float-left">
+                            <div class="avatar">
+                                <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                <span class="avatar-status badge-success"></span>
+                            </div>
+                        </div>
+                        <div>
+                            <small class="text-muted">Lukasz Holeczek</small>
+                            <small class="text-muted float-right mt-1">1:52 PM</small>
+                        </div>
+                        <div class="text-truncate font-weight-bold">Lorem ipsum dolor sit amet</div>
+                        <small class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...</small>
+                    </div>
+                    <hr>
+                    <div class="message">
+                        <div class="py-3 pb-5 mr-3 float-left">
+                            <div class="avatar">
+                                <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                <span class="avatar-status badge-success"></span>
+                            </div>
+                        </div>
+                        <div>
+                            <small class="text-muted">Lukasz Holeczek</small>
+                            <small class="text-muted float-right mt-1">1:52 PM</small>
+                        </div>
+                        <div class="text-truncate font-weight-bold">Lorem ipsum dolor sit amet</div>
+                        <small class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...</small>
+                    </div>
+                    <hr>
+                    <div class="message">
+                        <div class="py-3 pb-5 mr-3 float-left">
+                            <div class="avatar">
+                                <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                <span class="avatar-status badge-success"></span>
+                            </div>
+                        </div>
+                        <div>
+                            <small class="text-muted">Lukasz Holeczek</small>
+                            <small class="text-muted float-right mt-1">1:52 PM</small>
+                        </div>
+                        <div class="text-truncate font-weight-bold">Lorem ipsum dolor sit amet</div>
+                        <small class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...</small>
+                    </div>
+                    <hr>
+                    <div class="message">
+                        <div class="py-3 pb-5 mr-3 float-left">
+                            <div class="avatar">
+                                <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                <span class="avatar-status badge-success"></span>
+                            </div>
+                        </div>
+                        <div>
+                            <small class="text-muted">Lukasz Holeczek</small>
+                            <small class="text-muted float-right mt-1">1:52 PM</small>
+                        </div>
+                        <div class="text-truncate font-weight-bold">Lorem ipsum dolor sit amet</div>
+                        <small class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...</small>
+                    </div>
+                    <hr>
+                    <div class="message">
+                        <div class="py-3 pb-5 mr-3 float-left">
+                            <div class="avatar">
+                                <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                <span class="avatar-status badge-success"></span>
+                            </div>
+                        </div>
+                        <div>
+                            <small class="text-muted">Lukasz Holeczek</small>
+                            <small class="text-muted float-right mt-1">1:52 PM</small>
+                        </div>
+                        <div class="text-truncate font-weight-bold">Lorem ipsum dolor sit amet</div>
+                        <small class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...</small>
+                    </div>
+                </div>                
+            </div>
+        </aside>
+
+    </div>
+    <footer class="app-footer">
+        <a href="http://ndkhoa09">CoreUI</a> © 2018 creativeLabs.
+        <span class="float-right">
+            Powered by <a href="http://ndkhoa09">CoreUI</a>
+        </span>
+    </footer>
+
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>

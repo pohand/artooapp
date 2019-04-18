@@ -1,0 +1,63 @@
+﻿@model Email
+<!-- Breadcrumb -->
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a href="#">Home</a>
+    </li>
+    <li class="breadcrumb-item active">Email Detail</li>
+</ol>
+
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <strong>Email Detail</strong>
+                    </div>
+                    <form asp-action="Update" method="post" class="form-horizontal" role="form">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <div asp-validation-summary="All" class="text-danger"></div>
+                            </div>
+                            <div class="form-group row" hidden>
+                                <label asp-for="EmailId" class="col-md-3 form-control-label" for="text-input">Id</label>
+                                <div class="col-md-9">
+                                    <input asp-for="EmailId" class="form-control" placeholder="Id" value="@Model.EmailId" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="EmailAddress" class="col-md-3 form-control-label" for="text-input">Email Address</label>
+                                <div class="col-md-9">
+                                    <input asp-for="EmailAddress" class="form-control" placeholder="Email Address" value="@Model.EmailAddress" />
+                                    <span asp-validation-for="EmailAddress" class="help-block"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="FirstName" class="col-md-3 form-control-label" for="text-input">First Name</label>
+                                <div class="col-md-9">
+                                    <input asp-for="FirstName" class="form-control" placeholder="First Name" value="@Model.FirstName" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="LastName" class="col-md-3 form-control-label" for="text-input">Last Name</label>
+                                <div class="col-md-9">
+                                    <input asp-for="LastName" class="form-control" placeholder="Last Name" value="@Model.LastName" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="DateRegister" class="col-md-3 form-control-label" for="text-input">Ngày tạo</label>
+                                <div class="col-md-9">
+                                    <label class="form-control-label">@Model.DateRegister</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

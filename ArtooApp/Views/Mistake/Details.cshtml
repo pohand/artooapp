@@ -1,0 +1,104 @@
+﻿@model MistakeViewModel
+<!-- Breadcrumb -->
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a href="#">Home</a>
+    </li>
+    <li class="breadcrumb-item active">Tạo lỗi</li>
+</ol>
+
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <strong>Lỗi</strong>
+                        @if (!string.IsNullOrEmpty(ViewBag.message))
+                        {
+                            <span class="badge badge-success float-right">@ViewBag.message</span>
+                        }
+                    </div>
+                    <form asp-action="Details" method="post" class="form-horizontal" role="form" enctype="multipart/form-data">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <div asp-validation-summary="All" class="text-danger"></div>
+                            </div>
+                            <div class="form-group row" hidden>
+                                <label asp-for="MistakeId" class="col-md-3 form-control-label" for="text-input">Tên</label>
+                                <div class="col-md-9">
+                                    <input asp-for="MistakeId" class="form-control" placeholder="Lỗi" value="@Model.MistakeId" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="Name" class="col-md-3 form-control-label" for="text-input">Tên</label>
+                                <div class="col-md-9">
+                                    <input asp-for="Name" class="form-control" placeholder="Lỗi" value="@Model.Name" />
+                                    <span asp-validation-for="Name" class="help-block"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="Description" class="col-md-3 form-control-label" for="text-input">Mô tả</label>
+                                <div class="col-md-9">
+                                    <input asp-for="Description" class="form-control" placeholder="Mô tả" value="@Model.Description" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 form-control-label">Loại lỗi</label>
+                                <div class="col-md-9">
+                                    <label class="radio-inline" for="inline-radio1">
+                                        <input asp-for="ManualType" type="radio" value="0" checked="checked"> Lỗi kiểm tra bằng tay và mắt
+                                    </label>
+                                    <label class="radio-inline" for="inline-radio2">
+                                        <input asp-for="ManualType" type="radio" value="1"> Lỗi kiểm tra bằng thiết bị
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="DateRegister" class="col-md-3 form-control-label" for="text-input">Ngày tạo</label>
+                                <div class="col-md-9">
+                                    <label class="form-control-label">@Model.DateRegister</label>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 form-control-label">Hình</label>
+                                <div class="col-md-9">
+                                    <img width="638" src="~/ErrorImages/@Html.DisplayFor(model =>model.ImageUrl)" alt="" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 form-control-label">Đổi hình</label>
+                                <div class="col-md-9">
+                                    <input asp-for="Image" class="file" type="file">
+                                    <div class="input-group col-xs-12">
+                                        <span class="input-group-addon"><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" class="form-control image-upload input-lg" disabled placeholder="Upload Image">
+                                        <span class="input-group-btn">
+                                            <button class="browse btn btn-primary input-lg" type="button"><i class="glyphicon glyphicon-search"></i> Browse</button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Update</button>
+                                <a asp-controller="Mistake" asp-action="Index" class="btn btn-sm btn-danger"><i class="fa fa-ban"></i> Cancel</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        $(document).on('click', '.browse', function () {
+            var file = $(this).parent().parent().parent().find('.file');
+            file.trigger('click');
+        });
+        $(document).on('change', '.file', function () {
+            $(this).parent().find('.image-upload').val($(this).val().replace(/C:\\fakepath\\/i, ''));
+        });
+    </script>
+}
+

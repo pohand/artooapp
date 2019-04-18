@@ -1,0 +1,177 @@
+﻿@model InspectionListViewModel
+<!-- Breadcrumb -->
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a href="#">Home</a>
+    </li>
+    <li class="breadcrumb-item active">Inspection List</li>
+</ol>
+
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fa fa-align-justify"></i>
+                        <strong>Reject List</strong>
+                    </div>
+                    <div class="card-body">
+                        <form asp-controller="Inspection" asp-action="List" method="get" class="inlinesearch">
+                            <div class="row">
+                                <div class="form-group col-md-2">
+                                    <label for="exampleInputEmail2" class="lablesearch">Factory </label>
+                                    <select asp-items="@Model.FactoryList" name="factoryString" asp-for="@Model.FactorySearchString" class="form-control">
+                                        <option value="0">Please select</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label for="exampleInputEmail2" class="lablesearch">Week </label>
+                                    <select asp-items="@Model.FinalWeekList" name="weekString" asp-for="@Model.FinalWeekSearchString" class="form-control">
+                                        <option value="0">Please select</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="exampleInputName2" class="lablesearch">Kĩ thuật trưởng </label>
+                                    <input type="text" value="@Model.TechManagerNameSearchString" name="techManagerString" class="form-control" placeholder="Kĩ thuật trưởng">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="exampleInputName2" class="lablesearch">Order Number </label>
+                                    <input type="text" value="@Model.OrderNumberSearchString" name="orderString" class="form-control" placeholder="Order Number">
+                                </div>
+
+                                <div class="form-group col-md-2">
+                                    <label for="exampleInputName2" class="lablesearch">. </label>
+                                    <span class="input-group-btn lablesearch">
+                                        <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> Search</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </form>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Factory</th>
+                                    <th>Order number</th>
+                                    <th>Iman</th>
+                                    <th>Passion brand</th>
+                                    <th>Model</th>
+                                    <th>Kĩ thuật trưởng</th>
+                                    <th>Order Quantity</th>
+                                    <th>Order Type</th>
+                                    <th>Final</th>
+                                    @*<th>Action</th>*@
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.InspectionList)
+                                {
+                                    <tr>
+                                        <td>@item.FactoryName</td>
+                                        <td>@item.OrderNumber</td>
+                                        <td>@item.IMAN</td>
+                                        <td>@item.PassionBrandName</td>
+                                        <td>@item.Model</td>
+                                        <td>@item.TechManagerName</td>
+                                        <td>@item.OrderQuantity</td>
+                                        <td>@item.OrderTypeName</td>
+                                        <td>@item.FinalDate</td>
+                                        @*<td>
+                                            @if (item.BookingStatus == true && item.InspectStatus == false)
+                                            {
+                                                <a asp-controller="Inspection" asp-action="UnBookToList" class="btn btn-danger btn-sm" asp-route-bookid="@item.InspectionId" asp-route-page="@Model.Page.CurrentPage" asp-route-factoryString="@Model.FactorySearchString" asp-route-orderString="@Model.OrderNumberSearchString" asp-route-weekString="@Model.FinalWeekSearchString" asp-route-techManagerString="@Model.TechManagerNameSearchString">UnBook</a>
+                                            }
+
+                                            @if (item.InspectStatus == false)
+                                            {
+                                                <a asp-controller="Inspection" asp-action="Details" class="btn btn-success btn-sm" asp-route-id="@item.InspectionId" asp-route-page="@Model.Page.CurrentPage" asp-route-factoryString="@Model.FactorySearchString" asp-route-orderString="@Model.OrderNumberSearchString" asp-route-weekString="@Model.FinalWeekSearchString" asp-route-techManagerString="@Model.TechManagerNameSearchString">Inspect</a>
+                                            }
+                                        </td>*@
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                        <ul class="pagination">
+                            <li class="page-item">
+                                @if (@Model.Page.PreviousPage == 1)
+                                {
+                                    <a>Prev</a>
+                                }
+                                else
+                                {
+                                    <a asp-controller="Inspection" asp-action="List" class="page-link" asp-route-page="@Model.Page.PreviousPage" asp-route-factoryString="@Model.FactorySearchString" asp-route-orderString="@Model.OrderNumberSearchString" asp-route-weekString="@Model.FinalWeekSearchString" asp-route-techManagerString="@Model.TechManagerNameSearchString">Prev</a>
+                                }
+                            </li>
+                            @if (Model.Page.PageCount > 10)
+                            {
+                                var maxPage = Model.Page.CurrentPage + 5 > Model.Page.PageCount ? Model.Page.PageCount : Model.Page.CurrentPage + 5;
+                                var minPage = Model.Page.CurrentPage - 5 < 1 ? 1 : Model.Page.CurrentPage - 5;
+                                @for (int i = minPage; i <= maxPage; i++)
+                                {
+                                    if (Model.Page.CurrentPage == i)
+                                    {
+                                        <li class="page-item active">
+                                            <a>@i</a>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li class="page-item">
+                                            <a asp-controller="Inspection" asp-action="List" class="page-link" asp-route-page="@i" asp-route-factoryString="@Model.FactorySearchString" asp-route-orderString="@Model.OrderNumberSearchString" asp-route-weekString="@Model.FinalWeekSearchString" asp-route-techManagerString="@Model.TechManagerNameSearchString">@i</a>
+                                        </li>
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                @for (int i = 1; i <= Model.Page.PageCount; i++)
+                                {
+                                    if (Model.Page.CurrentPage == i)
+                                    {
+                                        <li class="page-item active">
+                                            <a>@i</a>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li class="page-item">
+                                            <a asp-controller="Inspection" asp-action="List" class="page-link" asp-route-page="@i" asp-route-factoryString="@Model.FactorySearchString" asp-route-orderString="@Model.OrderNumberSearchString" asp-route-weekString="@Model.FinalWeekSearchString" asp-route-techManagerString="@Model.TechManagerNameSearchString">@i</a>
+                                        </li>
+                                    }
+                                }
+
+                            }
+                            <li class="page-item">
+                                @if (@Model.Page.NextPage == Model.Page.PageCount)
+                                {
+                                    <a>Next</a>
+                                }
+                                else
+                                {
+                                    <a asp-controller="Inspection" asp-action="List" class="page-link" asp-route-page="@Model.Page.NextPage" asp-route-factoryString="@Model.FactorySearchString" asp-route-orderString="@Model.OrderNumberSearchString" asp-route-weekString="@Model.FinalWeekSearchString" asp-route-techManagerString="@Model.TechManagerNameSearchString">Next</a>
+                                }
+                            </li>
+                            @*@for (int i = 1; i <= Model.Page.PageCount; i++)
+                                {
+                                    if (Model.Page.CurrentPage == i)
+                                    {
+                                        <li class="page-item active">
+                                            <a>@i</a>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li class="page-item">
+                                            <a asp-controller="Inspection" asp-action="List" class="page-link" asp-route-searchString="@ViewBag.searchString" asp-route-id="@i">@i</a>
+                                        </li>
+                                    }
+                                }*@
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.conainer-fluid -->
+    </div>
+</div>
