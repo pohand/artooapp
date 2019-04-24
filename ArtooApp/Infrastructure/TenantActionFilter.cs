@@ -1,19 +1,20 @@
 ﻿using Artoo.Models;
+using Artoo.Providers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Artoo.Infrastructure
 {
     public class TenantAttribute : ActionFilterAttribute
     {
         private readonly AppDbContext _dbcontext;
-        public TenantAttribute(AppDbContext dbcontext)
+        private ITenantProvider _tenantProvider;
+        public TenantAttribute(AppDbContext dbcontext, ITenantProvider tenantProvider)
         {
             _dbcontext = dbcontext;
+            _tenantProvider = tenantProvider;
         }
 
         public override void OnActionExecuting(ActionExecutingContext actionExecutingContext)
@@ -28,7 +29,9 @@ namespace Artoo.Infrastructure
             else
             {
                 var subdomain = fullAddress[0];
-                var tenant = _dbcontext.Tenants
+                //var tenant = _dbcontext.Tenants
+                //    .SingleOrDefault(t => string.Equals(t.HostName, subdomain, StringComparison.OrdinalIgnoreCase));
+                var tenant = _tenantProvider.GetTenants()
                     .SingleOrDefault(t => string.Equals(t.HostName, subdomain, StringComparison.OrdinalIgnoreCase));
                 if (tenant != null)
                 {

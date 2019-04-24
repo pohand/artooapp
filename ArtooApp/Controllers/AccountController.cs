@@ -1,4 +1,5 @@
-﻿using Artoo.IRepositories;
+﻿using Artoo.Infrastructure;
+using Artoo.IRepositories;
 using Artoo.Models;
 using Artoo.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -14,6 +15,7 @@ using System.Threading.Tasks;
 namespace Artoo.Controllers
 {
     [Authorize]
+    [ServiceFilter(typeof(TenantAttribute))]
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -21,6 +23,7 @@ namespace Artoo.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IFactoryRepository _factoryRepository;
         private readonly ITechManagerRepository _techManagerRepository;
+        private Tenant _tenant;
 
         public AccountController(UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
@@ -33,6 +36,10 @@ namespace Artoo.Controllers
             _roleManager = roleManager;
             _factoryRepository = factoryRepository;
             _techManagerRepository = techManagerRepository;
+            if (RouteData != null)
+            {
+                _tenant = (Tenant)RouteData.Values.SingleOrDefault(r => r.Key == "tenant").Value ;
+            }
         }
 
         [AllowAnonymous]
@@ -89,11 +96,13 @@ namespace Artoo.Controllers
             }
             if (ModelState.IsValid)
             {
+                _tenant = (Tenant)RouteData.Values.SingleOrDefault(r => r.Key == "tenant").Value;
                 var user = new ApplicationUser()
                 {
                     UserName = loginViewModel.UserName,
                     Email = loginViewModel.Email,
-                    FactoryId = loginViewModel.FactoryId == 0 ? null : loginViewModel.FactoryId
+                    FactoryId = loginViewModel.FactoryId == 0 ? null : loginViewModel.FactoryId,
+                    TenantId = _tenant.TenantId
                 };
                 var result = await _userManager.CreateAsync(user, loginViewModel.Password);
 

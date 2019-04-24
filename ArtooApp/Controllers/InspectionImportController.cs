@@ -13,12 +13,14 @@ using Microsoft.Extensions.FileProviders;
 using OfficeOpenXml;
 using Artoo.Helpers;
 using Microsoft.AspNetCore.Identity;
+using Artoo.Infrastructure;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Artoo.Controllers
 {
     [Authorize]
+    [ServiceFilter(typeof(TenantAttribute))]
     public class InspectionImportController : Controller
     {
         private readonly IFileProvider _fileProvider;
@@ -29,6 +31,7 @@ namespace Artoo.Controllers
         private readonly IFinalWeekRepository _finalWeekRepository;
         private readonly ITechManagerRepository _techManagerRepository;
         private readonly UserManager<ApplicationUser> _userManager;
+        private Tenant _tenant;
 
         public InspectionImportController(AppDbContext appDbContext,
             IFileProvider fileProvider,
@@ -50,8 +53,12 @@ namespace Artoo.Controllers
         }
         public IActionResult Index()
         {
+            if (RouteData != null)
+            {
+                _tenant = (Tenant)RouteData.Values.SingleOrDefault(r => r.Key == "tenant").Value;
+            }
             var model = new FilesViewModel();
-            foreach (var item in _fileProvider.GetDirectoryContents("FileUploads"))
+            foreach (var item in _fileProvider.GetDirectoryContents("FileUploads" + "\\" +_tenant.HostName))
             {
                 model.Files.Add(
                     new FileDetails { Name = item.Name, Path = item.PhysicalPath });
@@ -62,9 +69,13 @@ namespace Artoo.Controllers
 
         public void UpdateFactory()
         {
+            if (RouteData != null)
+            {
+                _tenant = (Tenant)RouteData.Values.SingleOrDefault(r => r.Key == "tenant").Value;
+            }
             var dt = DateTime.Now;
             foreach (string path in Directory.EnumerateFiles(
-            Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\FileUploads"), "*", SearchOption.AllDirectories))
+            Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\FileUploads" + "\\" + _tenant.HostName), "*", SearchOption.AllDirectories))
             {
                 FileInfo fileInfo = new FileInfo(path);
 
@@ -245,6 +256,10 @@ namespace Artoo.Controllers
         [HttpPost]
         public async Task<IActionResult> UploadFile(IFormFile file)
         {
+            if (RouteData != null)
+            {
+                _tenant = (Tenant)RouteData.Values.SingleOrDefault(r => r.Key == "tenant").Value;
+            }
             var username = await _userManager.GetUserAsync(User);
             if (file == null || file.Length == 0)
                 return Content("file not selected");
@@ -253,7 +268,7 @@ namespace Artoo.Controllers
 
             //repare path for file
             var path = Path.Combine(
-                        Directory.GetCurrentDirectory(), "wwwroot\\FileUploads",
+                        Directory.GetCurrentDirectory(), "wwwroot\\FileUploads" + "\\" + _tenant.HostName,
                         DateTime.Now.ToString("d").Replace("/", "-") + "-" + GetRandomNumber(0, 10) + "-" + file.GetFilename());
 
             //input excel file to system in order read it
@@ -422,8 +437,12 @@ namespace Artoo.Controllers
 
         public IActionResult RemoveDB(string filename)
         {
+            if (RouteData != null)
+            {
+                _tenant = (Tenant)RouteData.Values.SingleOrDefault(r => r.Key == "tenant").Value;
+            }
             var path = Path.Combine(
-                        Directory.GetCurrentDirectory(), "wwwroot\\FileUploads", filename);
+                        Directory.GetCurrentDirectory(), "wwwroot\\FileUploads" + "\\" + _tenant.HostName, filename);
             FileInfo fileInfo = new FileInfo(path);
 
             using (ExcelPackage package = new ExcelPackage(fileInfo))
@@ -499,12 +518,16 @@ namespace Artoo.Controllers
 
         public async Task<IActionResult> Download(string filename)
         {
+            if (RouteData != null)
+            {
+                _tenant = (Tenant)RouteData.Values.SingleOrDefault(r => r.Key == "tenant").Value;
+            }
             if (filename == null)
                 return Content("filename not present");
 
             var path = Path.Combine(
                            Directory.GetCurrentDirectory(),
-                           "wwwroot\\FileUploads", filename);
+                           "wwwroot\\FileUploads" + "\\" + _tenant.HostName, filename);
 
             var memory = new MemoryStream();
             using (var stream = new FileStream(path, FileMode.Open))

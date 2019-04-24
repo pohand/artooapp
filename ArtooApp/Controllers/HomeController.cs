@@ -24,13 +24,11 @@ namespace Artoo.Controllers
         private readonly IDashboardRepository _dashboardRepository;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IInspectionRepository _inspectionRepository;
-        //private KeyValuePair<string, object> _tenant;
         public HomeController(IDashboardRepository dashboardRepository, UserManager<ApplicationUser> userManager, IInspectionRepository inspectionRepository)
         {
             _dashboardRepository = dashboardRepository;
             _userManager = userManager;
             _inspectionRepository = inspectionRepository;
-            //_tenant = RouteData.Values.SingleOrDefault(r => r.Key == "tenant");
         }
 
         public async Task<IActionResult> Index()

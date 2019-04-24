@@ -21,6 +21,7 @@ namespace ArtooApp
             var builder = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json");
+            //.AddJsonFile("appsettings.production.json");
 
             Configuration = builder.Build();
 

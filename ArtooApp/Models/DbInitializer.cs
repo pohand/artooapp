@@ -8,13 +8,13 @@ namespace Artoo.Models
         public static void Seed(AppDbContext context, RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
         {
             context.Database.EnsureCreated();
-            if (!context.Tenants.Any())
-            {
-                context.Tenants.Add(new Tenant() { Name = "dpc", HostName = "dpc"  });
-                context.Tenants.Add(new Tenant() { Name = "garmex", HostName = "garmex"});
-                context.SaveChanges();
-            }
-            context.SaveChanges();
+            //if (!context.Tenants.Any())
+            //{
+            //    context.Tenants.Add(new Tenant() { Name = "dpc", HostName = "dpc"  });
+            //    context.Tenants.Add(new Tenant() { Name = "garmex", HostName = "garmex"});
+            //    context.SaveChanges();
+            //}
+            //context.SaveChanges();
             SeedRoles(roleManager);
             SeedUser(userManager);
         }
@@ -56,11 +56,13 @@ namespace Artoo.Models
 
         public static void SeedUser(UserManager<ApplicationUser> userManager)
         {
+            var userApp = userManager.FindByNameAsync("admin").Result;
             if (userManager.FindByNameAsync("admin").Result == null)
             {
                 ApplicationUser user = new ApplicationUser();
                 user.UserName = "admin";
                 user.Email = "admin@artoo.com";
+                user.TenantId = 1;
 
                 IdentityResult result = userManager.CreateAsync
                 (user, "Admin123.").Result;

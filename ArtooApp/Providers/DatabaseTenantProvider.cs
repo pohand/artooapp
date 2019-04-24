@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Routing;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -13,10 +14,10 @@ namespace Artoo.Providers
     {
         private string _host;
         private string _subdomain;
-        private static IList<Tenant> _tenants = new List<Tenant>()
+        private static List<Tenant> _tenants = new List<Tenant>()
         {
-            new Tenant { TenantId = 3, Name = "dpc", HostName="dpc", ConnectionString = "ConnStr1" },
-            new Tenant { TenantId = 4, Name = "garmex", HostName="garmex", ConnectionString = "ConnStr2" },
+            new Tenant { TenantId = 1, Name = "dpc", HostName="dpc" },
+            new Tenant { TenantId = 2, Name = "garmex", HostName="garmex" },
         };
 
         public DatabaseTenantProvider(IHttpContextAccessor accessor)
@@ -40,7 +41,12 @@ namespace Artoo.Providers
 
         public Tenant GetTenant()
         {
-            return _tenants.FirstOrDefault(x => x.HostName == _subdomain);
+            return _tenants.SingleOrDefault(t => string.Equals(t.HostName, _subdomain, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public List<Tenant> GetTenants()
+        {
+            return _tenants;
         }
     }
 }

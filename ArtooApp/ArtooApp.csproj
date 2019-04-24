@@ -14,7 +14,8 @@
 
   <ItemGroup>
     <Folder Include="Data\" />
-    <Folder Include="wwwroot\FileUploads\" />
+    <Folder Include="wwwroot\FileUploads\dpc\" />
+    <Folder Include="wwwroot\FileUploads\garmex\" />
   </ItemGroup>
 
   <ItemGroup>

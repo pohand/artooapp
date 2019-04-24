@@ -21,6 +21,7 @@ namespace Artoo.Controllers
     {
         private readonly IMistakeRepository _mistakeRepository;
         private const int itemsPerPage = 15;
+        private Tenant _tenant;
 
         public MistakeController(IMistakeRepository mistakeRepository)
         {
@@ -129,12 +130,17 @@ namespace Artoo.Controllers
 
         public bool Remove(string filename)
         {
+            if (RouteData != null)
+            {
+                _tenant = (Tenant)RouteData.Values.SingleOrDefault(r => r.Key == "tenant").Value;
+            }
+
             if (filename == null)
                 return false;
 
             var path = Path.Combine(
                            Directory.GetCurrentDirectory(),
-                           "wwwroot\\FileUploads", filename);
+                           "wwwroot\\FileUploads" + "\\" + _tenant.HostName, filename);
 
             if (System.IO.File.Exists(path))
             {

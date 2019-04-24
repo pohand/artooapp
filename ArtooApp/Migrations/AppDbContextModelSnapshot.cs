@@ -370,27 +370,6 @@ namespace ArtooApp.Migrations
                     b.ToTable("TechManagers");
                 });
 
-            modelBuilder.Entity("Artoo.Models.Tenant", b =>
-                {
-                    b.Property<int>("TenantId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ConnectionString");
-
-                    b.Property<DateTime>("CreationTime");
-
-                    b.Property<string>("Description");
-
-                    b.Property<string>("HostName");
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("TenantId");
-
-                    b.ToTable("Tenants");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")

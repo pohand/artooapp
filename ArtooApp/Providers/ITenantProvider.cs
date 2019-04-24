@@ -9,5 +9,6 @@ namespace Artoo.Providers
     public interface ITenantProvider
     {
         Tenant GetTenant();
+        List<Tenant> GetTenants();
     }
 }
