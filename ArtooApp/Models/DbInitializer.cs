@@ -56,12 +56,12 @@ namespace Artoo.Models
 
         public static void SeedUser(UserManager<ApplicationUser> userManager)
         {
-            var userApp = userManager.FindByNameAsync("admin").Result;
-            if (userManager.FindByNameAsync("admin").Result == null)
+            var userApp = userManager.FindByNameAsync("tngadmin").Result;
+            if (userManager.FindByNameAsync("tngadmin").Result == null)
             {
                 ApplicationUser user = new ApplicationUser();
-                user.UserName = "admin";
-                user.Email = "admin@artoo.com";
+                user.UserName = "tngadmin";
+                user.Email = "admin@artooapp.net";
                 user.TenantId = 1;
 
                 IdentityResult result = userManager.CreateAsync

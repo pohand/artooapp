@@ -18,6 +18,7 @@ namespace Artoo.Providers
         {
             new Tenant { TenantId = 1, Name = "dpc", HostName="dpc" },
             new Tenant { TenantId = 2, Name = "garmex", HostName="garmex" },
+            new Tenant { TenantId = 2, Name = "tng", HostName="tng" }
         };
 
         public DatabaseTenantProvider(IHttpContextAccessor accessor)

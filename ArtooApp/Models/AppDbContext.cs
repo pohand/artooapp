@@ -1,13 +1,7 @@
-﻿using Artoo.Helpers;
-using Artoo.Infrastructure;
-using Artoo.Providers;
-using Microsoft.AspNetCore.Http;
+﻿using Artoo.Providers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Artoo.Models
@@ -39,7 +33,6 @@ namespace Artoo.Models
             modelBuilder.Entity<ApplicationUser>().HasQueryFilter(p => p.TenantId == _tenantProvider.GetTenant().TenantId);
         }
 
-        //public DbSet<Tenant> Tenants { get; set; }
         public DbSet<Mistake> Mistakes { get; set; }
         public DbSet<PassionBrand> PassionBrands { get; set; }
         public DbSet<Factory> Factories { get; set; }
