@@ -61,11 +61,13 @@
                                     <th>Factory</th>
                                     <th>Kĩ thuật trưởng</th>
                                     <th>Người kiểm</th>
-                                    @*<th>Passion brand</th>*@
+                                    <th>IMAN</th>
+                                    <th>Model</th>
                                     <th>3rd Party</th>
                                     <th>Order No</th>
                                     <th>Lỗi kiểm tra bằng tay và mắt</th>
                                     <th>Lỗi Kiểm tra bằng thiết bị </th>
+                                    <th>Lỗi nhập tay</th>
                                     <th>Kết quả</th>
                                     <th>Approve</th>
                                 </tr>
@@ -73,68 +75,80 @@
                             <tbody>
                                 @foreach (var item in Model.InspectionList)
                                 {
-                                    <tr>
-                                        <td>@item.FactoryName</td>
-                                        <td>@item.TechManagerName</td>
-                                        <td>@item.Username</td>
-                                        @*<td>@item.PassionBrandName</td>*@
-                                        <td>
-                                            @if (item.IsThirdParty == true)
+                                <tr>
+                                    <td>@item.FactoryName</td>
+                                    <td>@item.TechManagerName</td>
+                                    <td>@item.Username</td>
+                                    <td>@item.IMAN</td>
+                                    <td>@item.Model</td>
+                                    <td>
+                                        @if (item.IsThirdParty == true)
+                                        {
+                                            <img src="~/img/yes-icon.png" width="30" alt="yes" />
+                                        }
+                                        else
+                                        {
+                                            <img src="~/img/no-icon.png" width="25" alt="yes" />
+                                        }
+                                    </td>
+                                    <td>@item.OrderNumber</td>
+                                    <td>
+                                        <ul>
+                                            @foreach (var mistake in item.ManualMistakeList)
                                             {
-                                                <img src="~/img/yes-icon.png" width="30" alt="yes" />
+                                                <li>
+                                                    @mistake.Name (@mistake.Quantity)
+                                                    <br />
+                                                </li>
                                             }
-                                            else
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        <ul>
+                                            @foreach (var mistake in item.DeviceMistakeList)
                                             {
-                                                <img src="~/img/no-icon.png" width="25" alt="yes" />
+                                                <li>
+                                                    @mistake.Name (@mistake.Quantity)
+                                                    <br />
+                                                </li>
                                             }
-                                        </td>
-                                        <td>@item.OrderNumber</td>
-                                        <td>
-                                            <ul>
-                                                @foreach (var mistake in item.ManualMistakeList)
-                                                {
-                                                    <li>
-                                                        @mistake.Name (@mistake.Quantity)
-                                                        <br />
-                                                    </li>
-                                                }
-                                            </ul>
-                                        </td>
-                                        <td>
-                                            <ul>
-                                                @foreach (var mistake in item.DeviceMistakeList)
-                                                {
-                                                    <li>
-                                                        @mistake.Name (@mistake.Quantity)
-                                                        <br />
-                                                    </li>
-                                                }
-                                            </ul>
-                                        </td>
-                                        <td>
-                                            @if (item.Result == (int)InspectionResultEnum.Accept)
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        <ul>
+                                            @foreach (var mistake in item.MistakeFrees)
                                             {
-                                                <span class="badge badge-success">@item.ResultString</span>
+                                                <li>
+                                                    @mistake
+                                                    <br />
+                                                </li>
                                             }
-                                            else if (item.Result == (int)InspectionResultEnum.Reject)
-                                            {
-                                                <span class="badge badge-danger">@item.ResultString</span>
-                                            }
-                                        </td>
-                                        <td>
-                                            @if (!string.IsNullOrEmpty(item.ApproveUsername))
-                                            {
-                                                @*<a asp-controller="Inspection" asp-action="ReportApprove" class="btn btn-warning btn-sm" asp-route-id="@item.InspectionId">@item.ApproveUsername</a>*@
-                                                <a class="btn btn-warning btn-sm">@item.ApproveUsername</a>
-                                            }
-                                            else
-                                            {
-                                                <a asp-controller="Inspection" asp-action="ReportApprove" asp-route-id="@item.InspectionId" class="btn btn-success btn-sm" asp-route-page="@Model.Page.CurrentPage" asp-route-factoryString="@Model.FactorySearchString" asp-route-orderString="@Model.OrderNumberSearchString" asp-route-weekString="@Model.FinalWeekSearchString" asp-route-techManagerString="@Model.TechManagerNameSearchString" asp-route-resultString="@Model.ResultSearchString" asp-route-pageTotal="@Model.Page.PageCount">Approve</a>
-                                            }
-                                            <a asp-controller="Pdf" asp-action="PrintPdf" asp-route-id="@item.InspectionId" class="btn btn-danger btn-sm">Pdf</a>
-                                            @*<a asp-controller="SendEmail" asp-action="SendInsepectionEmail" asp-route-id="@item.InspectionId" class="btn btn-danger btn-sm">Send Email</a>*@
-                                        </td>
-                                    </tr>
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        @if (item.Result == (int)InspectionResultEnum.Accept)
+                                        {
+                                            <span class="badge badge-success">@item.ResultString</span>
+                                        }
+                                        else if (item.Result == (int)InspectionResultEnum.Reject)
+                                        {
+                                            <span class="badge badge-danger">@item.ResultString</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(item.ApproveUsername))
+                                        {
+                                            @*<a asp-controller="Inspection" asp-action="ReportApprove" class="btn btn-warning btn-sm" asp-route-id="@item.InspectionId">@item.ApproveUsername</a>*@
+                                            <a class="btn btn-warning btn-sm">@item.ApproveUsername</a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-controller="Inspection" asp-action="ReportApprove" asp-route-id="@item.InspectionId" class="btn btn-success btn-sm" asp-route-page="@Model.Page.CurrentPage" asp-route-factoryString="@Model.FactorySearchString" asp-route-orderString="@Model.OrderNumberSearchString" asp-route-weekString="@Model.FinalWeekSearchString" asp-route-techManagerString="@Model.TechManagerNameSearchString" asp-route-resultString="@Model.ResultSearchString" asp-route-pageTotal="@Model.Page.PageCount">Approve</a>
+                                        }
+                                        <a asp-controller="Pdf" asp-action="PrintPdf" asp-route-id="@item.InspectionId" class="btn btn-danger btn-sm">Pdf</a>
+                                        @*<a asp-controller="SendEmail" asp-action="SendInsepectionEmail" asp-route-id="@item.InspectionId" class="btn btn-danger btn-sm">Send Email</a>*@
+                                    </td>
+                                </tr>
                                 }
 
                             </tbody>

@@ -33,7 +33,7 @@ namespace ArtooApp
                 try
                 {
                     var context = services.GetRequiredService<AppDbContext>();
-                    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+                    var userManager = services.GetRequiredService<AppUserManager>();
                     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
                     context.Database.Migrate();
                     DbInitializer.Seed(context, roleManager, userManager);

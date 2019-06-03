@@ -110,6 +110,8 @@ namespace ArtooApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("OrderType");
+
                     b.Property<int>("PassionBrandId");
 
                     b.Property<int>("Result");
@@ -325,6 +327,31 @@ namespace ArtooApp.Migrations
                     b.HasKey("MistakeId");
 
                     b.ToTable("Mistakes");
+                });
+
+            modelBuilder.Entity("Artoo.Models.MistakeFree", b =>
+                {
+                    b.Property<int>("MistakeFreeId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("DateRegister");
+
+                    b.Property<string>("Description");
+
+                    b.Property<int>("InspectionId");
+
+                    b.Property<string>("Name");
+
+                    b.Property<bool>("Status");
+
+                    b.Property<int?>("TenantId");
+
+                    b.HasKey("MistakeFreeId");
+
+                    b.HasIndex("InspectionId");
+
+                    b.ToTable("MistakeFrees");
                 });
 
             modelBuilder.Entity("Artoo.Models.PassionBrand", b =>
@@ -546,6 +573,14 @@ namespace ArtooApp.Migrations
                     b.HasOne("Artoo.Models.Mistake", "Mistake")
                         .WithMany()
                         .HasForeignKey("MistakeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Artoo.Models.MistakeFree", b =>
+                {
+                    b.HasOne("Artoo.Models.Inspection", "Inspection")
+                        .WithMany()
+                        .HasForeignKey("InspectionId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

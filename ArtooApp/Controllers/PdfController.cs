@@ -96,7 +96,7 @@ namespace Artoo.Controllers
                               </tr>
                               <tr style='background:#fbfbfb'>
                                <td style='font-weight:bold;border-bottom:1px solid #eee;width:420px'>Loại đơn hàng</td>
-                               <td style='border-bottom:1px solid #eee'>{((OrderType)inspection.OrderType).ToString()}</td>
+                               <td style='border-bottom:1px solid #eee'>{((OrderTypeEnum)inspection.OrderType).ToString()}</td>
                               </tr>
                               <tr style='background:#f9f9f9'>
                                <td style='font-weight:bold;border-bottom:1px solid #eee;width:420px'>Kiểm tra bằng tay và mắt</td>

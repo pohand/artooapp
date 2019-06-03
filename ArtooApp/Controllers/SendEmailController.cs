@@ -92,7 +92,7 @@ namespace Artoo.Controllers
                               </tr>
                               <tr style='background:#fbfbfb'>
                                <td style='font-weight:bold;border-bottom:1px solid #eee;width:420px'>Loại đơn hàng</td>
-                               <td style='border-bottom:1px solid #eee'>{((OrderType)inspection.OrderType).ToString()}</td>
+                               <td style='border-bottom:1px solid #eee'>{((OrderTypeEnum)inspection.OrderType).ToString()}</td>
                               </tr>
                               <tr style='background:#f9f9f9'>
                                <td style='font-weight:bold;border-bottom:1px solid #eee;width:420px'>Kiểm tra bằng tay và mắt</td>
@@ -118,8 +118,8 @@ namespace Artoo.Controllers
                             </table></div>";
 
             EmailSender sender = new EmailSender();
-            var subject = $@"[{((OrderType)inspection.OrderType).ToString()}] Kết quả kiểm Final: {inspection.PassionBrandName} - [{((InspectionResultEnum)inspection.Result).ToString()}] - IMAN: {inspection.IMAN} - Model: {inspection.Model} - PO: {inspection.OrderNumber}";
-            var mailList = _emailRepository.GetEmailByBrandResult(inspection.PassionBrandId, (InspectionResultEnum)inspection.Result).ToList();
+            var subject = $@"[{((OrderTypeEnum)inspection.OrderType).ToString()}] Kết quả kiểm Final: {inspection.PassionBrandName} - [{((InspectionResultEnum)inspection.Result).ToString()}] - IMAN: {inspection.IMAN} - Model: {inspection.Model} - PO: {inspection.OrderNumber}";
+            var mailList = _emailRepository.GetEmailByBrandResultOrderType(inspection.PassionBrandId, (InspectionResultEnum)inspection.Result, (OrderTypeEnum)inspection.OrderType).ToList();
             if(mailList != null)
             {
                 await sender.SendEmailAsync(mailList.Select(x => x.EmailAddress).ToList(), subject, mailbody);

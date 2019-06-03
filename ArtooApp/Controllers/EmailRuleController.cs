@@ -51,34 +51,36 @@ namespace Artoo.Controllers
                 }).ToList();
         }
 
-        public List<SelectListItem> ResultList()
+        public List<SelectListItem> GetEnumList(Type enumType)
         {
-            Array values = Enum.GetValues(typeof(InspectionResultEnum));
+            Array values = Enum.GetValues(enumType);
             var results = new List<SelectListItem>();
 
             foreach (var i in values)
             {
                 results.Add(new SelectListItem
                 {
-                    Text = Enum.GetName(typeof(InspectionResultEnum), i),
+                    Text = Enum.GetName(enumType, i),
                     Value = ((int)i).ToString()
                 });
             }
             return results;
         }
+
         public IActionResult Create()
         {
             var passionBrands = PassionBrands();
-
             var emails = Emails();
-
-            var results = ResultList();
-
+            var results = GetEnumList(typeof(InspectionResultEnum));
+            var orderTypes = GetEnumList(typeof(OrderTypeEnum));
+            var emailIds = new List<int>();
             EmailRuleViewModel emailRuleVM = new EmailRuleViewModel()
             {
                 PassionBrands = passionBrands,
                 Emails = emails,
-                ResultList = results
+                ResultList = results,
+                EmailIds = emailIds,
+                OrderTypeList = orderTypes
             };
 
             return View(emailRuleVM);
@@ -92,7 +94,8 @@ namespace Artoo.Controllers
                 var emailRule = new EmailRule()
                 {
                     PassionBrandId = emailRuleVM.PassionBrandId,
-                    Result = emailRuleVM.Result
+                    Result = emailRuleVM.Result,
+                    OrderType = emailRuleVM.OrderType
                 };
 
                 var emailRuleDetailId = _emailRuleRepository.CreateEmailRule(emailRule);
@@ -132,6 +135,7 @@ namespace Artoo.Controllers
                 {
                     EmailRuleId = item.EmailRuleId,
                     Result = item.Result,
+                    OrderType = item.OrderType,
                     EmailList = emails,
                     PassionBrand = item.PassionBrand
                 };
@@ -153,10 +157,10 @@ namespace Artoo.Controllers
             {
                 var emailRule = new EmailRule()
                 {
-                    //EmailId = emailRuleVM.EmailId,
                     EmailRuleId = emailRuleVM.EmailRuleId,
                     PassionBrandId = emailRuleVM.PassionBrandId,
-                    Result = emailRuleVM.Result
+                    Result = emailRuleVM.Result,
+                    OrderType = emailRuleVM.OrderType
                 };
                 _emailRuleRepository.UpdateEmailRule(emailRule);
 
@@ -180,12 +184,15 @@ namespace Artoo.Controllers
 
             var passionBrands = PassionBrands();
             var emails = Emails();
-            var results = ResultList();
+            var results = GetEnumList(typeof(InspectionResultEnum));
+            var orderTypes = GetEnumList(typeof(OrderTypeEnum));
 
             emailRuleVM.PassionBrands = passionBrands;
             emailRuleVM.Emails = emails;
             emailRuleVM.ResultList = results;
-            return View(emailRuleVM);
+            emailRuleVM.OrderTypeList = orderTypes;
+            //return View(emailRuleVM);
+            return RedirectToAction("Index");
         }
 
         public IActionResult Details(int id)
@@ -196,18 +203,20 @@ namespace Artoo.Controllers
 
             var passionBrands = PassionBrands();
             var emails = Emails();
-            var results = ResultList();
+            var results = GetEnumList(typeof(InspectionResultEnum));
+            var orderTypes = GetEnumList(typeof(OrderTypeEnum));
 
             var emailRuleDetail = _emailRuleRepository.GetEmailRuleDetailByEmailRuleId(existing.EmailRuleId);
             var emailRuleVM = new EmailRuleViewModel()
             {
-                //EmailId = existing.EmailId,
                 EmailRuleId = existing.EmailRuleId,
                 PassionBrandId = existing.PassionBrandId,
                 Result = existing.Result,
+                OrderType = existing.OrderType,
                 Emails = emails,
                 PassionBrands = passionBrands,
                 ResultList = results,
+                OrderTypeList = orderTypes,
                 EmailIds = emailRuleDetail.Select(x=>x.EmailId).ToList()
             };
 

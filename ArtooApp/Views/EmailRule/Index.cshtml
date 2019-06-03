@@ -25,30 +25,32 @@
                                     <th>Email</th>
                                     <th>Passion Brand</th>
                                     <th>Result</th>
+                                    <th>Order Type</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach (var item in Model.EmailRules)
                                 {
-                                    <tr>
-                                        <td>
-                                            <ul>
-                                                @foreach (var email in item.EmailList)
-                                                {
-                                                    <li>
-                                                        @email.EmailAddress
-                                                    </li>
-                                                }
-                                            </ul>
-                                        </td>
-                                        <td>@item.PassionBrand.Name</td>
-                                        <td>@((InspectionResultEnum)item.Result)</td>
-                                        <td>
-                                            <a asp-controller="EmailRule" asp-action="Details" class="btn btn-success" asp-route-id="@item.EmailRuleId">Detail</a>
-                                            <a asp-action="Delete" asp-route-id="@item.EmailRuleId" class="btn btn-danger">Delete</a>
-                                        </td>
-                                    </tr>
+                                <tr>
+                                    <td>
+                                        <ul>
+                                            @foreach (var email in item.EmailList)
+                                            {
+                                                <li>
+                                                    @email.EmailAddress
+                                                </li>
+                                            }
+                                        </ul>
+                                    </td>
+                                    <td>@item.PassionBrand.Name</td>
+                                    <td>@((InspectionResultEnum)item.Result)</td>
+                                    <td>@((OrderTypeEnum)item.OrderType)</td>
+                                    <td>
+                                        <a asp-controller="EmailRule" asp-action="Details" class="btn btn-success" asp-route-id="@item.EmailRuleId">Detail</a>
+                                        <a asp-action="Delete" asp-route-id="@item.EmailRuleId" class="btn btn-danger">Delete</a>
+                                    </td>
+                                </tr>
                                 }
 
                             </tbody>

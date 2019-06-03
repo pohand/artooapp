@@ -36,7 +36,7 @@ namespace Artoo.Repositories
             //tổng số PO được inspect rồi
             var list = _appDbContext.Inspections.Where(t => t.InspectDate.Date >= previousFiveWeekStart.Date && t.InspectDate.Date < startingDate.Date && t.InspectStatus == true).ToList();
 
-            var manufacturerList = (from so in _appDbContext.Inspections
+            var manufacturerList = (from so in list//_appDbContext.Inspections : avoid retrieving all inspections to improve performance; btw maybe not list all manufacturer unless list does not collect all
                                     group so by so.FactoryName into TotaledFactories
                                     select new
                                     {
@@ -121,7 +121,7 @@ namespace Artoo.Repositories
                 var numberRate = (blockingRate - 1) / 5;
 
                 var totalPO = _appDbContext.Inspections.Where(t => t.FinalWeekId == finalWeekId && t.FactoryName == item.FactoryName).Count();
-                var listOfImplantation = _appDbContext.Inspections.Where(t => t.FinalWeekId == finalWeekId && t.FactoryName == item.FactoryName && t.OrderType == (int)OrderType.Implantation).Count();
+                var listOfImplantation = _appDbContext.Inspections.Where(t => t.FinalWeekId == finalWeekId && t.FactoryName == item.FactoryName && t.OrderType == (int)OrderTypeEnum.Implantation).Count();
                 //var listOfImplantation = _appDbContext.Inspections.Where(t => t.DateChecked.Date >= Convert.ToDateTime(blockingRateList.StartDate) && t.DateChecked.Date < Convert.ToDateTime(blockingRateList.EndDate) && t.FactoryName == item.FactoryName && t.OrderType == (int)OrderType.Implantation).Count();
 
                 int numberCheck = 0;
@@ -183,7 +183,7 @@ namespace Artoo.Repositories
             //tổng số sản phẩm được kiểm tra rồi
             var list = _appDbContext.Inspections.Where(t => t.InspectDate.Date >= previousFiveWeekStart.Date && t.InspectDate.Date < startingDate.Date && t.InspectStatus == true).ToList();
 
-            var manufacturerList = (from so in _appDbContext.Inspections
+            var manufacturerList = (from so in list//_appDbContext.Inspections : avoid retrieving all inspections to improve performance; btw maybe not list all manufacturer unless list does not collect all
                                     group so by so.FactoryName into TotaledFactories
                                     select new
                                     {

@@ -23,7 +23,12 @@ namespace Artoo.ViewModels
         public int EmailId { get; set; }
         public List<SelectListItem> Emails { get; set; }
         public List<int> EmailIds { get; set; }
+        public List<String> SelectedEmails { get; set; }
         public IEnumerable<Email> EmailList { get; set; }
         public PassionBrand PassionBrand { get; set; }
+
+        [Required(ErrorMessage = "Xin vui lòng chọn Order Type")]
+        public int OrderType { get; set; }
+        public List<SelectListItem> OrderTypeList { get; set; }
     }
 }

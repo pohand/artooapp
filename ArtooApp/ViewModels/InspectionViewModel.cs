@@ -68,5 +68,8 @@ namespace Artoo.ViewModels
 
         public Boolean IsThirdParty { get; set; }
         public string ThirdPartyDate { get; set; }
+
+        public List<string> MistakeFrees { get; set; }
+        public string MistakeFree { get; set; }
     }
 }

@@ -14,7 +14,7 @@ namespace Artoo.Common
         Accept = 1
     }
 
-    public enum OrderType
+    public enum OrderTypeEnum
     {
         Replenishment = 0,
         Implantation = 1

@@ -16,5 +16,6 @@ namespace Artoo.IRepositories
         Email GetEmailById(int emailId);
         IEnumerable<Email> GetEmailByIdList(List<int> emailIds);
         IEnumerable<Email> GetEmailByBrandResult(int brandId, InspectionResultEnum result);
+        IEnumerable<Email> GetEmailByBrandResultOrderType(int brandId, InspectionResultEnum result, OrderTypeEnum orderType);
     }
 }

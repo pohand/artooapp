@@ -56,49 +56,60 @@
                                     <th>Order number</th>
                                     <th>Iman</th>
                                     <th>Passion brand</th>
+                                    <th>Model</th>
                                     <th>Order Quantity</th>
                                     <th>Kĩ thuật trưởng</th>
                                     <th>Order Type</th>
-                                    <th>Final</th>
+                                    <th>Ngày xuất</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach (var item in Model.InspectionList)
                                 {
-                                    <tr>
-                                        <td>@item.ItemIndex</td>
-                                        <td>@item.FactoryName</td>
-                                        <td>@item.OrderNumber</td>
-                                        <td>@item.IMAN</td>
-                                        <td>@item.PassionBrandName</td>
-                                        <td>@item.OrderQuantity</td>
-                                        <td>@item.TechManagerName</td>
-                                        <td>@item.OrderTypeName</td>
-                                        <td>@item.FinalDate</td>
+                                <tr>
+                                    <td>@item.ItemIndex</td>
+                                    <td>@item.FactoryName</td>
+                                    <td>@item.OrderNumber</td>
+                                    <td>@item.IMAN</td>
+                                    <td>@item.PassionBrandName</td>
+                                    <td>@item.Model</td>
+                                    <td>@item.OrderQuantity</td>
+                                    <td>@item.TechManagerName</td>
+                                    @if (item.OrderType == 1)
+                                    {
                                         <td>
-                                            @if (item.BookingStatus == false)
-                                            {
-                                                <a asp-controller="Inspection" asp-action="Book" class="btn btn-success btn-sm" asp-route-bookid="@item.InspectionId" asp-route-page="@Model.Page.CurrentPage" asp-route-factoryString="@Model.FactorySearchString" asp-route-orderString="@Model.OrderNumberSearchString" asp-route-weekString="@Model.FinalWeekSearchString" asp-route-techManagerString="@Model.TechManagerNameSearchString">Book</a>
-                                            }
-                                            else if (item.BookingStatus == true && item.InspectStatus == false)
-                                            {
-                                                //<a asp-controller="Inspection" asp-action="UnBook" class="btn btn-danger btn-sm" asp-route-bookid="@item.InspectionId" asp-route-page="@Model.Page.CurrentPage" asp-route-factoryString="@Model.FactorySearchString" asp-route-orderString="@Model.OrderNumberSearchString" asp-route-weekString="@Model.FinalWeekSearchString" asp-route-techManagerString="@Model.TechManagerNameSearchString">UnBook</a>
-                                                if (string.IsNullOrEmpty(item.UserBooking))
-                                                    {
-                                                        <a asp-controller="Inspection" asp-action="UnBook" class="btn btn-danger btn-sm" asp-route-bookid="@item.InspectionId" asp-route-page="@Model.Page.CurrentPage" asp-route-factoryString="@Model.FactorySearchString" asp-route-orderString="@Model.OrderNumberSearchString" asp-route-weekString="@Model.FinalWeekSearchString" asp-route-techManagerString="@Model.TechManagerNameSearchString">UnBook</a>
-                                                    }
-                                                    else
-                                                    {
-                                                        <span class="badge badge-warning">@item.UserBooking</span>
-                                                    }
-                                            }
-                                            else if (item.InspectStatus == true)
-                                            {
-                                                <span class="badge badge-warning">Inspected</span>
-                                            }
+                                            <span class="badge badge-warning">@item.OrderTypeName</span>
                                         </td>
-                                    </tr>
+                                    }
+                                    else
+                                    {
+                                        <td>@item.OrderTypeName</td>
+                                    }
+                                    <td>@item.FinalDate</td>
+                                    <td>
+                                        @if (item.BookingStatus == false)
+                                        {
+                                            <a asp-controller="Inspection" asp-action="Book" class="btn btn-success btn-sm" asp-route-bookid="@item.InspectionId" asp-route-page="@Model.Page.CurrentPage" asp-route-factoryString="@Model.FactorySearchString" asp-route-orderString="@Model.OrderNumberSearchString" asp-route-weekString="@Model.FinalWeekSearchString" asp-route-techManagerString="@Model.TechManagerNameSearchString">Book</a>
+                                        }
+                                        else if (item.BookingStatus == true && item.InspectStatus == false)
+                                        {
+                                            //<a asp-controller="Inspection" asp-action="UnBook" class="btn btn-danger btn-sm" asp-route-bookid="@item.InspectionId" asp-route-page="@Model.Page.CurrentPage" asp-route-factoryString="@Model.FactorySearchString" asp-route-orderString="@Model.OrderNumberSearchString" asp-route-weekString="@Model.FinalWeekSearchString" asp-route-techManagerString="@Model.TechManagerNameSearchString">UnBook</a>
+                                            if (string.IsNullOrEmpty(item.UserBooking))
+                                            {
+                                                <a asp-controller="Inspection" asp-action="UnBook" class="btn btn-danger btn-sm" asp-route-bookid="@item.InspectionId" asp-route-page="@Model.Page.CurrentPage" asp-route-factoryString="@Model.FactorySearchString" asp-route-orderString="@Model.OrderNumberSearchString" asp-route-weekString="@Model.FinalWeekSearchString" asp-route-techManagerString="@Model.TechManagerNameSearchString">UnBook</a>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-warning">@item.UserBooking</span>
+                                            }
+                                        }
+                                        else if (item.InspectStatus == true)
+                                        {
+                                            <span class="badge badge-warning">Inspected</span>
+                                        }
+                                    </td>
+                                </tr>
                                 }
 
                             </tbody>

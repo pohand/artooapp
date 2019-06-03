@@ -45,10 +45,26 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-md-3 form-control-label" for="text-input">Email Address</label>
+                                <label class="col-md-3 form-control-label" for="text-input">Order Type</label>
                                 <div class="col-md-9">
-                                    @*<select asp-for="EmailId" asp-items="@Model.Emails" class="form-control"></select>*@
-                                    <select multiple="multiple" asp-for="EmailIds" asp-items="@Model.Emails" class="form-control" size="50" style="height: 100%" ></select>
+                                    <select asp-for="OrderType" asp-items="@Model.OrderTypeList" class="form-control"></select>
+                                    <span asp-validation-for="OrderType" class="help-block"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 form-control-label" for="text-input">Email Address</label>
+                                <div class="col-md-9  form-check">
+                                    @foreach (var item in Model.Emails)
+                                    {
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox"
+                                                       name="EmailIds"
+                                                       value="@item.Value"
+                                                       @if (Model.EmailIds.Contains(Convert.ToInt32(@item.Value))) { <text> checked </text> } /> @item.Text
+                                                </label>
+                                            </div>
+                                        }
                                     <span asp-validation-for="EmailId" class="help-block"></span>
                                 </div>
                             </div>

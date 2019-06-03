@@ -30,6 +30,8 @@ namespace Artoo.Models
             modelBuilder.Entity<EmailRule>().HasQueryFilter(p => p.TenantId == _tenantProvider.GetTenant().TenantId);
             modelBuilder.Entity<TechManager>().HasQueryFilter(p => p.TenantId == _tenantProvider.GetTenant().TenantId);
             modelBuilder.Entity<EmailRuleDetail>().HasQueryFilter(p => p.TenantId == _tenantProvider.GetTenant().TenantId);
+            modelBuilder.Entity<MistakeFree>().HasQueryFilter(p => p.TenantId == _tenantProvider.GetTenant().TenantId);
+
             modelBuilder.Entity<ApplicationUser>().HasQueryFilter(p => p.TenantId == _tenantProvider.GetTenant().TenantId);
         }
 
@@ -43,6 +45,7 @@ namespace Artoo.Models
         public DbSet<FinalWeek> FinalWeeks { get; set; }
         public DbSet<TechManager> TechManagers { get; set; }
         public DbSet<EmailRuleDetail> EmailRuleDetails { get; set; }
+        public DbSet<MistakeFree> MistakeFrees { get; set; }
 
         public override int SaveChanges()
         {

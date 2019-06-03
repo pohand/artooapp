@@ -73,6 +73,7 @@ namespace ArtooApp
             services.AddTransient<IDashboardRepository, DashboardRepository>();
             services.AddTransient<IFinalWeekRepository, FinalWeekRepository>();
             services.AddTransient<ITechManagerRepository, TechManagerRepository>();
+            services.AddTransient<IMistakeFreeRepository, MistakeFreeRepository>();
 
             services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools())); //DinkToPdf
             services.AddScoped(typeof(TenantAttribute));
@@ -82,7 +83,6 @@ namespace ArtooApp
             services.AddSession();
 
             services.AddTransient<ITenantProvider, DatabaseTenantProvider>();
-            //services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

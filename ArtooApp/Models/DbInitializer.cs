@@ -5,16 +5,9 @@ namespace Artoo.Models
 {
     public static class DbInitializer
     {
-        public static void Seed(AppDbContext context, RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
+        public static void Seed(AppDbContext context, RoleManager<IdentityRole> roleManager, AppUserManager userManager)
         {
             context.Database.EnsureCreated();
-            //if (!context.Tenants.Any())
-            //{
-            //    context.Tenants.Add(new Tenant() { Name = "dpc", HostName = "dpc"  });
-            //    context.Tenants.Add(new Tenant() { Name = "garmex", HostName = "garmex"});
-            //    context.SaveChanges();
-            //}
-            //context.SaveChanges();
             SeedRoles(roleManager);
             SeedUser(userManager);
         }
@@ -33,7 +26,7 @@ namespace Artoo.Models
             {
                 IdentityRole role = new IdentityRole();
                 role.Name = "Factory Manager";
-                //role.Description = "Perform normal operations.";
+                //role.Description  = "Perform factory operations.";
                 IdentityResult roleResult = roleManager.CreateAsync(role).Result;
             }
 
@@ -41,7 +34,7 @@ namespace Artoo.Models
             {
                 IdentityRole role = new IdentityRole();
                 role.Name = "Decathlon Manager";
-                //role.Description = "Perform normal operations.";
+                //role.Description = "Perform Decathlon operations.";
                 IdentityResult roleResult = roleManager.CreateAsync(role).Result;
             }
 
@@ -49,20 +42,20 @@ namespace Artoo.Models
             {
                 IdentityRole role = new IdentityRole();
                 role.Name = "QPL";
-                //role.Description = "Perform normal operations.";
+                //role.Description = "Perform QPL operations.";
                 IdentityResult roleResult = roleManager.CreateAsync(role).Result;
             }
         }
 
-        public static void SeedUser(UserManager<ApplicationUser> userManager)
+        public static void SeedUser(AppUserManager userManager)
         {
-            var userApp = userManager.FindByNameAsync("tngadmin").Result;
-            if (userManager.FindByNameAsync("tngadmin").Result == null)
+            var userApp = userManager.FindByNameAndTenantAsync("gmadmin", 2).Result;
+            if (userApp == null)
             {
                 ApplicationUser user = new ApplicationUser();
-                user.UserName = "tngadmin";
-                user.Email = "admin@artooapp.net";
-                user.TenantId = 1;
+                user.UserName = "gmadmin";
+                user.Email = "gmadmin@artooapp.net";
+                user.TenantId = 2;
 
                 IdentityResult result = userManager.CreateAsync
                 (user, "Admin123.").Result;

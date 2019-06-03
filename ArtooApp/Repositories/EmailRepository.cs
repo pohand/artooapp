@@ -72,5 +72,14 @@ namespace Artoo.Repositories
 
             return emailList;
         }
+
+        public IEnumerable<Email> GetEmailByBrandResultOrderType(int brandId, InspectionResultEnum result, OrderTypeEnum orderType)
+        {
+            var emailRule = _appDbContext.EmailRules.Where(x => x.PassionBrandId == brandId && x.Result == ((int)(InspectionResultEnum)result) && x.OrderType == ((int)(OrderTypeEnum)orderType));
+            var emailIds = _appDbContext.EmailRuleDetails.Where(x => emailRule.Select(p => p.EmailRuleId).Contains(x.EmailRuleId));
+            var emailList = _appDbContext.Emails.Where(x => emailIds.Select(p => p.EmailId).Contains(x.EmailId));
+
+            return emailList;
+        }
     }
 }

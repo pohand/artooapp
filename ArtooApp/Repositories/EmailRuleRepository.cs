@@ -68,10 +68,9 @@ namespace Artoo.Repositories
                 {
                     existing.PassionBrandId = emailRule.PassionBrandId;
                     existing.Result = emailRule.Result;
-                    //existing.EmailId = emailRule.EmailId;
+                    existing.OrderType = emailRule.OrderType;
 
                     _appDbContext.EmailRules.Update(existing);
-
                     _appDbContext.SaveChanges();
                 }
             }

@@ -17,6 +17,9 @@ namespace Artoo.Models
 
         [Required(ErrorMessage = "Xin vui lòng chọn Accpect/Reject")]
         public int Result { get; set; }
+
+        [Required(ErrorMessage = "Xin vui lòng chọn Order Type")]
+        public int OrderType { get; set; }
         //public int? EmailId { get; set; }
         //public virtual Email Email { get; set; }
     }

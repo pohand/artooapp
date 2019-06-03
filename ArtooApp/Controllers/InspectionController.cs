@@ -26,6 +26,7 @@ namespace Artoo.Controllers
         private readonly IFinalWeekRepository _finalWeekRepository;
         private readonly IFactoryRepository _factoryRepository;
         private readonly IEmailRepository _emailRepository;
+        private readonly IMistakeFreeRepository _mistakeFreeRepository;
 
         private const int itemsPerPage = 20;
         public InspectionController(IInspectionRepository inspectionRepository,
@@ -34,7 +35,8 @@ namespace Artoo.Controllers
             UserManager<ApplicationUser> userManager,
             IFinalWeekRepository finalWeekRepository,
             IFactoryRepository factoryRepository,
-            IEmailRepository emailRepository)
+            IEmailRepository emailRepository,
+            IMistakeFreeRepository mistakeFreeRepository)
         {
             _inspectionRepository = inspectionRepository;
             _mistakeRepository = mistakeRepository;
@@ -43,6 +45,7 @@ namespace Artoo.Controllers
             _finalWeekRepository = finalWeekRepository;
             _factoryRepository = factoryRepository;
             _emailRepository = emailRepository;
+            _mistakeFreeRepository = mistakeFreeRepository;
         }
 
         public async Task<ViewResult> Index(string factoryString, string orderString, string weekString, string techManagerString, int page = 1)
@@ -53,40 +56,6 @@ namespace Artoo.Controllers
                 var inspectionList = _inspectionRepository.Inspections;
                 var userList = _userManager.Users;
                 int factoryInt = 0;
-                //if (User.IsInRole("QPL"))
-                //{
-                //    if (user.Result.FactoryId != null)
-                //    {
-                //        inspectionList = inspectionList.Where(x => x.FactoryId == user.Result.FactoryId);
-                //    }
-                //    //remove after asking about logic
-                //    else
-                //    {
-                //        if (!string.IsNullOrEmpty(factoryString))
-                //        {
-                //            if (Int32.TryParse(factoryString, out factoryInt))
-                //            {
-                //                if (factoryInt != 0)
-                //                {
-                //                    inspectionList = inspectionList.Where(x => x.FactoryId == factoryInt);
-                //                }
-                //            }
-                //        }
-                //    }
-                //}
-                //else
-                //{
-                //    if (!string.IsNullOrEmpty(factoryString))
-                //    {
-                //        if (Int32.TryParse(factoryString, out factoryInt))
-                //        {
-                //            if (factoryInt != 0)
-                //            {
-                //                inspectionList = inspectionList.Where(x => x.FactoryId == factoryInt);
-                //            }
-                //        }
-                //    }
-                //}
 
                 if (!string.IsNullOrEmpty(factoryString))
                 {
@@ -166,7 +135,7 @@ namespace Artoo.Controllers
                         NumberChecked = inspection.NumberChecked,
                         OrderNumber = inspection.OrderNumber,
                         OrderQuantity = inspection.OrderQuantity,
-                        OrderTypeName = inspection.OrderType == 1 ? OrderType.Implantation.ToString() : OrderType.Replenishment.ToString(),
+                        OrderTypeName = inspection.OrderType == 1 ? OrderTypeEnum.Implantation.ToString() : OrderTypeEnum.Replenishment.ToString(),
                         OrderType = inspection.OrderType,
                         Parameter = inspection.Parameter,
                         PassionBrandName = inspection.PassionBrandName,
@@ -371,9 +340,7 @@ namespace Artoo.Controllers
 
             if (!string.IsNullOrEmpty(techManagerString))
             {
-                //inspectionList = inspectionList.Where(x => x.TechManagerName.IndexOf(techManagerString, StringComparison.OrdinalIgnoreCase) >= 0);
                 inspectionList = inspectionList.Where(x => x.TechManagerName.Contains(techManagerString, StringComparison.OrdinalIgnoreCase));
-
             }
             var count = inspectionList.Where(p => p.BookingStatus == true && p.InspectStatus == true).Count();
             int pageCount = (count + itemsPerPage - 1) / itemsPerPage;
@@ -405,7 +372,7 @@ namespace Artoo.Controllers
                     NumberChecked = inspection.NumberChecked,
                     OrderNumber = inspection.OrderNumber,
                     OrderQuantity = inspection.OrderQuantity,
-                    OrderTypeName = inspection.OrderType == 1 ? OrderType.Implantation.ToString() : OrderType.Replenishment.ToString(),
+                    OrderTypeName = inspection.OrderType == 1 ? OrderTypeEnum.Implantation.ToString() : OrderTypeEnum.Replenishment.ToString(),
                     Parameter = inspection.Parameter,
                     PassionBrandName = inspection.PassionBrandName,
                     PONumber = inspection.PONumber,
@@ -420,11 +387,12 @@ namespace Artoo.Controllers
                 };
 
                 var manualMistakeList = _mistakeRepository.GetMistakeDetailByInspectionId(inspection.InspectionId).Where(x => x.ManualType == (int)MistakeEnum.ManualMistake).ToList();
-
                 var deviceMistakeList = _mistakeRepository.GetMistakeDetailByInspectionId(inspection.InspectionId).Where(x => x.ManualType == (int)MistakeEnum.DeviceMistake).ToList();
+                var mistakeFree = _mistakeFreeRepository.GetMistakeFreeByInspectionId(inspection.InspectionId);
 
                 inspectionVM.ManualMistakeList = manualMistakeList;
                 inspectionVM.DeviceMistakeList = deviceMistakeList;
+                inspectionVM.MistakeFrees = mistakeFree.Select(x => x.Description).ToList();
                 inspectionListVM.Add(inspectionVM);
             }
 
@@ -730,6 +698,13 @@ namespace Artoo.Controllers
                     }
                 }
 
+                var mstFree = new MistakeFree()
+                {
+                    InspectionId = inspectionVM.InspectionId,
+                    Description = inspectionVM.MistakeFree
+                };
+                _mistakeFreeRepository.InsertMistakeFree(mstFree);
+
                 inspection.Parameter = inspectionVM.Parameter;
                 inspection.PassionBrandId = inspectionVM.PassionBrandId;
                 inspection.CustomerComment = inspectionVM.CustomerComment;
@@ -756,7 +731,7 @@ namespace Artoo.Controllers
 
                 if (inspectionVM.PassionBrandId > 0 && inspection.Result > 0)
                 {
-                    var mailList = _emailRepository.GetEmailByBrandResult(inspectionVM.PassionBrandId, (InspectionResultEnum)inspection.Result).ToList();
+                    var mailList = _emailRepository.GetEmailByBrandResultOrderType(inspectionVM.PassionBrandId, (InspectionResultEnum)inspection.Result, (OrderTypeEnum)inspection.OrderType).ToList();
                     var manualMistakeString = string.Empty;
                     if (inspectionVM.ManualMistakeString != null)
                     {
@@ -809,7 +784,7 @@ namespace Artoo.Controllers
 		                            </tr>
 		                            <tr style='background:#fbfbfb'>
 			                            <td style='font-weight:bold;border-bottom:1px solid #eee;width:180px'>Loại đơn hàng</td>
-			                            <td style='border-bottom:1px solid #eee'>{((OrderType)inspectionVM.OrderType).ToString()}</td>
+			                            <td style='border-bottom:1px solid #eee'>{((OrderTypeEnum)inspectionVM.OrderType).ToString()}</td>
 		                            </tr>
 		                            <tr style='background:#f9f9f9'>
 			                            <td style='font-weight:bold;border-bottom:1px solid #eee;width:180px'>Kiểm tra bằng tay và mắt</td>
@@ -818,6 +793,10 @@ namespace Artoo.Controllers
 		                            <tr style='background:#fbfbfb'>
 			                            <td style='font-weight:bold;border-bottom:1px solid #eee;width:180px'>Kiểm tra bằng thiết bị </td>
 			                            <td style='border-bottom:1px solid #eee'>{deviceMistakeString}</td>
+		                            </tr>
+                                    <tr style='background:#f9f9f9'>
+			                            <td style='font-weight:bold;border-bottom:1px solid #eee;width:180px'>Lỗi nhập tay bổ sung</td>
+			                            <td style='border-bottom:1px solid #eee'>{inspectionVM.MistakeFree}</td>
 		                            </tr>
 		                            <tr style='background:#f9f9f9'>
 			                            <td style='font-weight:bold;border-bottom:1px solid #eee;width:180px'>Thông số</td>
@@ -835,7 +814,7 @@ namespace Artoo.Controllers
                             </table>";
 
                             EmailSender sender = new EmailSender();
-                            var subject = $@"[{((OrderType)inspectionVM.OrderType).ToString()}] Kết quả kiểm Final: {inspectionVM.PassionBrandName} - [{((InspectionResultEnum)inspectionVM.Result).ToString()}] - IMAN: {inspectionVM.IMAN} - Model: {inspectionVM.Model} - PO: {inspectionVM.OrderNumber}";
+                            var subject = $@"[{((OrderTypeEnum)inspectionVM.OrderType).ToString()}] Kết quả kiểm Final: {inspectionVM.PassionBrandName} - [{((InspectionResultEnum)inspectionVM.Result).ToString()}] - IMAN: {inspectionVM.IMAN} - Model: {inspectionVM.Model} - PO: {inspectionVM.OrderNumber}";
                             await sender.SendEmailAsync(mailList.Select(x => x.EmailAddress).ToList(), subject, mailbody);
                         }
                     }
