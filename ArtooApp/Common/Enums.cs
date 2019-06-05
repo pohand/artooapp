@@ -33,4 +33,11 @@ namespace Artoo.Common
         [Description("Manager")]
         Manager = 4,
     }
+
+    public enum TenantEnum
+    {
+        dpc = 1,
+        garmex = 2,
+        tng = 3
+    }
 }

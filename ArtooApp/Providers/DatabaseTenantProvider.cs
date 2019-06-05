@@ -1,4 +1,5 @@
-﻿using Artoo.Models;
+﻿using Artoo.Common;
+using Artoo.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Routing;
@@ -16,9 +17,9 @@ namespace Artoo.Providers
         private string _subdomain;
         private static List<Tenant> _tenants = new List<Tenant>()
         {
-            new Tenant { TenantId = 1, Name = "dpc", HostName="dpc" },
-            new Tenant { TenantId = 2, Name = "garmex", HostName="garmex" },
-            new Tenant { TenantId = 3, Name = "tng", HostName="tng" }
+            new Tenant { TenantId = (int)TenantEnum.dpc, Name = TenantEnum.dpc.ToString(), HostName=TenantEnum.dpc.ToString() },
+            new Tenant { TenantId = (int)TenantEnum.garmex, Name = TenantEnum.garmex.ToString(), HostName="garmex" },
+            new Tenant { TenantId = (int)TenantEnum.tng, Name = TenantEnum.tng.ToString(), HostName=TenantEnum.tng.ToString() }
         };
 
         public DatabaseTenantProvider(IHttpContextAccessor accessor)

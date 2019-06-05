@@ -17,14 +17,12 @@ namespace ArtooApp
         public static void Main(string[] args)
         {
             var host = CreateWebHostBuilder(args).Build();
-
             var builder = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json");
             //.AddJsonFile("appsettings.production.json");
 
             Configuration = builder.Build();
-
 
             using (var scope = host.Services.CreateScope())
             {
@@ -50,6 +48,11 @@ namespace ArtooApp
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+                .UseStartup<Startup>()
+                .ConfigureLogging(logging =>
+                {
+                    logging.ClearProviders();
+                    logging.AddConsole();
+                });
     }
 }

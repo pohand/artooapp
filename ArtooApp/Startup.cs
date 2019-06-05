@@ -2,9 +2,11 @@
 using System.IO;
 using Artoo.Infrastructure;
 using Artoo.IRepositories;
+using Artoo.IServices;
 using Artoo.Models;
 using Artoo.Providers;
 using Artoo.Repositories;
+using Artoo.Services;
 using DinkToPdf;
 using DinkToPdf.Contracts;
 using Microsoft.AspNetCore.Builder;
@@ -74,6 +76,8 @@ namespace ArtooApp
             services.AddTransient<IFinalWeekRepository, FinalWeekRepository>();
             services.AddTransient<ITechManagerRepository, TechManagerRepository>();
             services.AddTransient<IMistakeFreeRepository, MistakeFreeRepository>();
+
+            services.AddTransient<IInspectionImportService, InspectionImportService>();
 
             services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools())); //DinkToPdf
             services.AddScoped(typeof(TenantAttribute));

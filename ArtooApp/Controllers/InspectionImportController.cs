@@ -14,6 +14,8 @@ using OfficeOpenXml;
 using Artoo.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Artoo.Infrastructure;
+using Artoo.IServices;
+using Artoo.Common;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -31,6 +33,8 @@ namespace Artoo.Controllers
         private readonly IFinalWeekRepository _finalWeekRepository;
         private readonly ITechManagerRepository _techManagerRepository;
         private readonly UserManager<ApplicationUser> _userManager;
+
+        private readonly IInspectionImportService _inspectionImportService;
         private Tenant _tenant;
 
         public InspectionImportController(AppDbContext appDbContext,
@@ -40,6 +44,7 @@ namespace Artoo.Controllers
             IFactoryRepository factoryRepository,
             IFinalWeekRepository finalWeekRepository,
             ITechManagerRepository techManagerRepository,
+            IInspectionImportService inspectionImportService,
             UserManager<ApplicationUser> userManager)
         {
             _fileProvider = fileProvider;
@@ -49,6 +54,7 @@ namespace Artoo.Controllers
             _factoryRepository = factoryRepository;
             _finalWeekRepository = finalWeekRepository;
             _techManagerRepository = techManagerRepository;
+            _inspectionImportService = inspectionImportService;
             _userManager = userManager;
         }
         public IActionResult Index()
@@ -302,122 +308,13 @@ namespace Artoo.Controllers
                     //loop all worksheet in excel file
                     for (int j = 1; j <= workSheetTotal; j++)
                     {
-                        ExcelWorksheet workSheet = package.Workbook.Worksheets[j];
-                        //read every column in each worksheet
-                        if (workSheet.Dimension != null)
+                        if (_tenant.TenantId == (int)TenantEnum.garmex)
                         {
-                            int totalRows = workSheet.Dimension.Rows;
-
-                            var passionBrands = _passionBrandRepository.PassionBrands;
-                            var factories = _factoryRepository.Factories;
-                            var finalWeeks = _finalWeekRepository.FinalWeeks; 
-                            var techManagers = _techManagerRepository.TechManagers;
-                            for (int i = 2; i <= totalRows; i++)
-                            {
-                                if(workSheet.Cells[i, 1].Value == null)
-                                {
-                                    continue;
-                                }
-                                var inspection = new Inspection();
-                                inspection.FactoryName = AssignCell(i, workSheet, "Factory");
-                                inspection.OrderNumber = AssignCell(i, workSheet, "Order number");
-                                inspection.IMAN = AssignCell(i, workSheet, "Iman");
-                                inspection.Model = AssignCell(i, workSheet, "Model");
-                                inspection.PassionBrandName = AssignCell(i, workSheet, "Passion brand");
-                                inspection.Description = AssignCell(i, workSheet, "Description");
-                                inspection.OrderQuantity = AssignCell(i, workSheet, "Ord Q'ty") != null ? int.Parse(AssignCell(i, workSheet, "Ord Q'ty").Trim()) : 0;
-                                inspection.OrderType = AssignCell(i, workSheet, "Implantation") == null ? 0 : (AssignCell(i, workSheet, "Implantation").Trim().ToUpper() == "YES" ? 1 : 0);
-                                inspection.TechManagerName = AssignCell(i, workSheet, "KĨ THUẬT TRƯỞNG");
-
-                                //Add finalweek into db, finalweek is based on Final column in excel file. It must be unique. If it is existing, get existing id. 
-                                double finalDate;
-                                int weekOfYear = 0;
-                                var importHelper = new ImportHelper();
-                                if (double.TryParse(AssignCell(i, workSheet, "Final"), out finalDate))
-                                {
-                                    inspection.FinalDate = importHelper.FromOADate(finalDate);
-                                    weekOfYear = importHelper.GetIso8601WeekOfYear(inspection.FinalDate);
-                                }
-
-                                if (weekOfYear != 0)
-                                {
-                                    //the format standard is Year + -W + WeekNumberOfYear, for example: 2018-W14
-                                    var finalWeekName = inspection.FinalDate.Year.ToString() + "-W" + weekOfYear;
-                                    var existingFinalWeek = finalWeeks.FirstOrDefault(x => x.Name == finalWeekName);
-                                    //if finalweek is existing, get the existing FinalWeekID and assign it to inspection
-                                    if (existingFinalWeek != null)
-                                    {
-                                        inspection.FinalWeekId = existingFinalWeek.FinalWeekId;
-                                    }
-                                    //if finalweek is NOT existing, create new one and assign this to inspection
-                                    else
-                                    {
-                                        var newFinalWeek = new FinalWeek()
-                                        {
-                                            Week = weekOfYear,
-                                            Name = finalWeekName,
-                                            Year = Int32.Parse(inspection.FinalDate.Year.ToString()),
-                                            Description = inspection.FinalDate.Year.ToString() + "-W" + weekOfYear,
-                                            FinalWeekDay = inspection.FinalDate,
-                                            DateRegister = DateTime.Now
-                                        };
-
-                                        int finalWeekId = _finalWeekRepository.CreateFinalWeek(newFinalWeek);
-                                        inspection.FinalWeekId = finalWeekId;
-                                    }
-                                }
-
-                                //Add passionBranch into db, passionBranch is based on Passion Branch column in excel file. It must be unique. If it is existing, get existing id.
-                                var brand = passionBrands.FirstOrDefault(x => x.Name.Contains(inspection.PassionBrandName));
-                                //var brand = passionBrands.FirstOrDefault(x => x.Name.IndexOf(inspection.PassionBrandName, StringComparison.OrdinalIgnoreCase) >= 0);
-                                if (brand != null)
-                                {
-                                    inspection.PassionBrandId = brand.PassionBrandId;
-                                }
-                                else
-                                {
-                                    var passionBrand = new PassionBrand()
-                                    {
-                                        Name = inspection.PassionBrandName
-                                    };
-                                    inspection.PassionBrandId = _passionBrandRepository.CreatePassionBrand(passionBrand);
-                                }
-
-                                //Add factory into db, factory is based on Factory column in excel file. It must be unique. If it is existing, get existing id.
-                                var factory = factories.FirstOrDefault(x => x.Name.Contains(inspection.FactoryName));
-                                if (factory != null)
-                                {
-                                    inspection.FactoryId = factory.FactoryId;
-                                }
-                                else
-                                {
-                                    var newFactory = new Factory()
-                                    {
-                                        Name = inspection.FactoryName
-                                    };
-
-                                    inspection.FactoryId = _factoryRepository.CreateFactory(newFactory);
-                                }
-
-                                //Add techmanager into db, techmanager is based on Kĩ Thuật Trưởng column in excel file. It must be unique. If it is existing, get existing id.
-                                //var techManager = techManagers.FirstOrDefault(x => x.Name.Contains(inspection.TechManagerName));
-                                //if (techManager != null)
-                                //{
-                                //    inspection.TechManagerId = techManager.TechManagerId;
-                                //}
-                                //else
-                                //{
-                                //    var newTechManager = new TechManager()
-                                //    {
-                                //        Name = inspection.TechManagerName
-                                //    };
-
-
-                                //    inspection.TechManagerId = _techManagerRepository.CreateTechManager(newTechManager);
-                                //}
-                                inspection.TenantId = username.TenantId;
-                                inspectionList.Add(inspection);
-                            }
+                            _inspectionImportService.ImportItemByTenant(username, package, inspectionList, j);
+                        }
+                        else
+                        {
+                            _inspectionImportService.ImportItem(username, package, inspectionList, j);
                         }
                     }
                 }
@@ -434,7 +331,7 @@ namespace Artoo.Controllers
                 return RedirectToAction("Index");
             }
         }
-
+                
         public IActionResult RemoveDB(string filename)
         {
             if (RouteData != null)
@@ -540,12 +437,17 @@ namespace Artoo.Controllers
 
         public IActionResult Delete(string filename)
         {
+            if (RouteData != null)
+            {
+                _tenant = (Tenant)RouteData.Values.SingleOrDefault(r => r.Key == "tenant").Value;
+            }
+
             if (filename == null)
                 return Content("filename not present");
 
             var path = Path.Combine(
                            Directory.GetCurrentDirectory(),
-                           "wwwroot\\FileUploads", filename);
+                           "wwwroot\\FileUploads" + "\\" + _tenant.HostName, filename);
 
             if (System.IO.File.Exists(path))
             {
