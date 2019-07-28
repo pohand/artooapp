@@ -23,5 +23,7 @@ namespace Artoo.Models
         public bool Status { get; set; }
         public DateTime DateRegister { get; set; }
         public string ImageUrl { get; set; }
+        public int? MistakeCategoryID { get; set; }
+        public virtual MistakeCategory MistakeCategory { get; set; }
     }
 }

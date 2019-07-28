@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Artoo.Models;
 using Artoo.IRepositories;
 using Artoo.Helpers;
@@ -48,16 +47,6 @@ namespace Artoo.Repositories
 
             if (existing != null)
             {
-                //existing.Description = inspection.Description;
-                //existing.IMAN = inspection.IMAN;
-                //existing.MistakeLines = inspection.MistakeLines;
-                //existing.Model = inspection.Model;
-                //existing.OrderNumber = inspection.OrderNumber;
-                //existing.OrderQuantity = inspection.OrderQuantity;
-                //existing.OrderType = inspection.OrderType;
-                //existing.PassionBrand = inspection.PassionBrand;
-                //existing.PONumber = inspection.PONumber;
-
                 existing.IsThirdParty = inspection.IsThirdParty;
                 existing.InspectDate = inspection.InspectDate;
                 existing.InspectStatus = inspection.InspectStatus;
@@ -120,8 +109,6 @@ namespace Artoo.Repositories
                         _appDbContext.Inspections.Remove(inspection);
                         _appDbContext.SaveChanges();
                     }
-                    //_appDbContext.Inspections.Remove(inspection);
-                    //_appDbContext.SaveChanges();
                 }
             }
         }
@@ -152,18 +139,6 @@ namespace Artoo.Repositories
                 _appDbContext.Inspections.Update(item);
                 _appDbContext.SaveChanges();
             }
-            //foreach (var item in inspectionList)
-            //{
-            //    var existing = _appDbContext.Inspections.Any(x => x.OrderNumber == item.OrderNumber);
-            //    if (existing)
-            //    {
-            //        var i = _appDbContext.Inspections.FirstOrDefault(x => x.OrderNumber == item.OrderNumber);
-            //        i.FactoryName = item.FactoryName;
-            //        i.FactoryId = item.FactoryId;
-            //        _appDbContext.Inspections.Update(i);
-            //        _appDbContext.SaveChanges();
-            //    }
-            //}
         }
 
         public void UpdateWeekFinal(List<Inspection> inspectionList)
@@ -185,17 +160,6 @@ namespace Artoo.Repositories
                     _appDbContext.SaveChanges();
                 }
             }
-
-            //foreach (var item in inspectionList)
-            //{
-            //    var existing = _appDbContext.Inspections.FirstOrDefault(x => x.OrderNumber.Contains(item.OrderNumber));
-            //    if (existing != null)
-            //    {
-            //        existing.FinalWeekId = item.FinalWeekId;
-            //        _appDbContext.Inspections.Update(existing);
-            //        _appDbContext.SaveChanges();
-            //    }
-            //}
         }
 
         public void UpdateTechManager(List<Inspection> inspectionList)
@@ -225,18 +189,6 @@ namespace Artoo.Repositories
                     _appDbContext.Inspections.Update(item);
                     _appDbContext.SaveChanges();
                 }
-
-                //inspectionList = inspectionList.Where(x => x.FactoryName == "2").ToList();
-                //foreach (var item in inspectionList)
-                //{
-                //    var existing = _appDbContext.Inspections.FirstOrDefault(x => x.OrderNumber.Contains(item.OrderNumber));
-                //    if (existing != null)
-                //    {
-                //        existing.TechManagerName = item.TechManagerName;
-                //        _appDbContext.Inspections.Update(existing);
-                //        _appDbContext.SaveChanges();
-                //    }
-                //}
             }
             catch (Exception ex)
             {

@@ -71,5 +71,11 @@ namespace Artoo.ViewModels
 
         public List<string> MistakeFrees { get; set; }
         public string MistakeFree { get; set; }
+
+        public List<SelectListItem> ManualMistakeCategoryList { get; set; }
+        public int? SelectedManualMistakeCategoryId { get; set; }
+
+        public List<SelectListItem> DeviceMistakeCategoryList { get; set; }
+        public int? SelectedDeviceMistakeCategoryId { get; set; }
     }
 }

@@ -17,7 +17,9 @@ namespace Artoo.IRepositories
         Mistake GetMistakeById(int mistakeId);
         List<Mistake> GetMistakeByInspectionId(int inspectionId);
         List<Mistake> GetMistakeByPrefix(string prefix, MistakeEnum mistakeType);
+        List<Mistake> GetMistakeByPrefix(string prefix, MistakeEnum mistakeType, int mistakeCategoryId);
         List<MistakeViewModel> GetMistakeDetailByInspectionId(int inspectionId);
         bool CheckExistingMistakeDetailById(int mistakeId);
+        List<Mistake> GetMistakesByCategory(int mistakeCategoryId);
     }
 }

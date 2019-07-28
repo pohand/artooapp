@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using Artoo.Models;
 
 namespace Artoo.Models
 {
@@ -31,6 +32,7 @@ namespace Artoo.Models
             modelBuilder.Entity<TechManager>().HasQueryFilter(p => p.TenantId == _tenantProvider.GetTenant().TenantId);
             modelBuilder.Entity<EmailRuleDetail>().HasQueryFilter(p => p.TenantId == _tenantProvider.GetTenant().TenantId);
             modelBuilder.Entity<MistakeFree>().HasQueryFilter(p => p.TenantId == _tenantProvider.GetTenant().TenantId);
+            modelBuilder.Entity<MistakeCategory>().HasQueryFilter(p => p.TenantId == _tenantProvider.GetTenant().TenantId);
 
             modelBuilder.Entity<ApplicationUser>().HasQueryFilter(p => p.TenantId == _tenantProvider.GetTenant().TenantId);
         }
@@ -46,6 +48,8 @@ namespace Artoo.Models
         public DbSet<TechManager> TechManagers { get; set; }
         public DbSet<EmailRuleDetail> EmailRuleDetails { get; set; }
         public DbSet<MistakeFree> MistakeFrees { get; set; }
+        public DbSet<MistakeCategory> MistakeCategories { get; set; }
+        public DbSet<MistakeCategory> MistakeCategory { get; set; }
 
         public override int SaveChanges()
         {
@@ -61,6 +65,5 @@ namespace Artoo.Models
 
             return base.SaveChanges();
         }
-
     }
 }

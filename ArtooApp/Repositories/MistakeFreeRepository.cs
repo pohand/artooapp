@@ -30,7 +30,9 @@ namespace Artoo.Repositories
 
         public void InsertMistakeFree(MistakeFree mistakeFree)
         {
+#pragma warning disable CS0472 // The result of the expression is always the same since a value of this type is never equal to 'null'
             if (mistakeFree.InspectionId != null)
+#pragma warning restore CS0472 // The result of the expression is always the same since a value of this type is never equal to 'null'
             {
                 mistakeFree.DateRegister = DateTime.Now;
                 _appDbContext.MistakeFrees.Add(mistakeFree);

@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 using Artoo.Models.FileInputModel;
 using System.Drawing;
 using Artoo.Common;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Artoo.IServices;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -20,20 +22,32 @@ namespace Artoo.Controllers
     public class MistakeController : Controller
     {
         private readonly IMistakeRepository _mistakeRepository;
+        private readonly IMistakeCategoryService _mistakeCategoryService;
         private const int itemsPerPage = 15;
         private Tenant _tenant;
 
-        public MistakeController(IMistakeRepository mistakeRepository)
+        public MistakeController(IMistakeRepository mistakeRepository,
+            IMistakeCategoryService mistakeCategoryService)
         {
             _mistakeRepository = mistakeRepository;
+            _mistakeCategoryService = mistakeCategoryService;
         }
 
         public IActionResult Create(string type)
         {
             MistakeViewModel model = new MistakeViewModel();
+            List<SelectListItem> mistakeCategories = new List<SelectListItem>();
             if (type == "1")
             {
+                mistakeCategories = _mistakeCategoryService.MistakeCategoriesByType(MistakeEnum.DeviceMistake);
+                model.MistakeCategoryList = mistakeCategories;
                 model.ManualType = 1;
+            }
+            else
+            {
+                mistakeCategories = _mistakeCategoryService.MistakeCategoriesByType(MistakeEnum.ManualMistake);
+                model.MistakeCategoryList = mistakeCategories;
+                model.ManualType = 0;
             }
             return View(model);
         }
@@ -48,6 +62,7 @@ namespace Artoo.Controllers
                 mistake.ManualType = mistakeVM.ManualType;
                 mistake.Name = mistakeVM.Name;
                 mistake.Status = mistakeVM.Status;
+                mistake.MistakeCategoryID = mistakeVM.SelectedMistakeCategoryId;
 
                 if (mistakeVM.Image != null && mistakeVM.Image.Length != 0)
                 {
@@ -76,6 +91,7 @@ namespace Artoo.Controllers
                 
                 _mistakeRepository.CreateMistake(mistake);
                 ViewBag.message = "Success";
+                return RedirectToAction("Index");
             }
             return View(mistakeVM);
         }
@@ -93,6 +109,7 @@ namespace Artoo.Controllers
                 mistake.ManualType = mistakeVM.ManualType;
                 mistake.Name = mistakeVM.Name;
                 mistake.Status = mistakeVM.Status;
+                mistake.MistakeCategoryID = mistakeVM.SelectedMistakeCategoryId;
 
                 if (mistakeVM.Image != null && mistakeVM.Image.Length != 0)
                 {
@@ -123,6 +140,7 @@ namespace Artoo.Controllers
                 mistakeVM.DateRegister = existing.DateRegister;
                 mistakeVM.ImageUrl = mistake.ImageUrl;
                 ViewBag.message = "Success";
+                return RedirectToAction("Index");
             }
 
             return View(mistakeVM);
@@ -185,10 +203,10 @@ namespace Artoo.Controllers
 
         public IActionResult Details(int id)
         {
-            var mistake = _mistakeRepository.GetMistakeById(id);
-
+            var mistake = _mistakeRepository.GetMistakeById(id);            
             if (mistake == null)
                 return NotFound();
+            var mistakeCategories = _mistakeCategoryService.MistakeCategories();
 
             var mistakeVM = new MistakeViewModel()
             {
@@ -198,7 +216,9 @@ namespace Artoo.Controllers
                 DateRegister = mistake.DateRegister,
                 ImageUrl = mistake.ImageUrl,
                 Name = mistake.Name,
-                Status = mistake.Status
+                Status = mistake.Status,
+                MistakeCategoryList = mistakeCategories,
+                SelectedMistakeCategoryId = mistake.MistakeCategoryID
             };
 
             return View(mistakeVM);

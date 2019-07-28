@@ -17,9 +17,7 @@ namespace Artoo.Controllers
     public class EmailRuleController : Controller
     {
         private readonly IEmailRuleRepository _emailRuleRepository;
-
         private readonly IPassionBrandRepository _passionBrandRepository;
-
         private readonly IEmailRepository _emailRepository;
 
         public EmailRuleController(IEmailRuleRepository emailRuleRepository,

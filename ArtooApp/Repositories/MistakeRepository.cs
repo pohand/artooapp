@@ -57,10 +57,10 @@ namespace Artoo.Repositories
                 existing.ManualType = mistake.ManualType;
                 existing.Name = mistake.Name;
                 existing.Status = mistake.Status;
-                existing.ImageUrl = mistake.ImageUrl;
+                existing.ImageUrl = mistake.ImageUrl == null ? existing.ImageUrl : mistake.ImageUrl;
+                existing.MistakeCategoryID = mistake.MistakeCategoryID;
 
                 _appDbContext.Mistakes.Update(existing);
-
                 _appDbContext.SaveChanges();
             }
         }
@@ -122,6 +122,23 @@ namespace Artoo.Repositories
         public bool CheckExistingMistakeDetailById(int mistakeId)
         {
             return _appDbContext.InspectionMistakeDetails.Any(x => x.MistakeId == mistakeId);
+        }
+
+        public List<Mistake> GetMistakesByCategory(int mistakeCategoryId)
+        {
+            return _appDbContext.Mistakes.Where(x => x.MistakeCategoryID == mistakeCategoryId).ToList();
+        }
+
+        public List<Mistake> GetMistakeByPrefix(string prefix, MistakeEnum mistakeType, int mistakeCategoryId)
+        {
+            if (mistakeType == MistakeEnum.ManualMistake)
+            {
+                return _appDbContext.Mistakes.Where(p => p.Name.Contains(prefix) && p.ManualType == (int)MistakeEnum.ManualMistake && p.MistakeCategoryID == mistakeCategoryId).ToList();
+            }
+            else
+            {
+                return _appDbContext.Mistakes.Where(p => p.Name.Contains(prefix) && p.ManualType == (int)MistakeEnum.DeviceMistake && p.MistakeCategoryID == mistakeCategoryId).ToList();
+            }
         }
     }
 }

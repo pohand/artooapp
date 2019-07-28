@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Artoo.ViewModels
 {
@@ -27,5 +26,7 @@ namespace Artoo.ViewModels
         public IFormFile Image { get; set; }
 
         public int? Quantity { get; set; }
+        public List<SelectListItem> MistakeCategoryList { get; set; }
+        public int? SelectedMistakeCategoryId { get; set; }
     }
 }

@@ -65,6 +65,7 @@ namespace ArtooApp
                 new PhysicalFileProvider(
                     Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")));
 
+            #region Repository DI
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IMistakeRepository, MistakeRepository>();
             services.AddTransient<IPassionBrandRepository, PassionBrandRepository>();
@@ -76,8 +77,13 @@ namespace ArtooApp
             services.AddTransient<IFinalWeekRepository, FinalWeekRepository>();
             services.AddTransient<ITechManagerRepository, TechManagerRepository>();
             services.AddTransient<IMistakeFreeRepository, MistakeFreeRepository>();
+            services.AddTransient<IMistakeCategoryRepository, MistakeCategoryRepository>();
+            #endregion
 
+            #region Service DI
             services.AddTransient<IInspectionImportService, InspectionImportService>();
+            services.AddTransient<IMistakeCategoryService, MistakeCategoryService>();
+            #endregion
 
             services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools())); //DinkToPdf
             services.AddScoped(typeof(TenantAttribute));

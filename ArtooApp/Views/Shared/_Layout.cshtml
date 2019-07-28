@@ -100,11 +100,16 @@
                     <li class="nav-item">
                         <a asp-controller="workload" asp-action="Index" class="nav-link"><i class="icon-calculator"></i> Team Workload </a>
                     </li>
-                    <li class="divider"></li>                    
+                    <li class="divider"></li>
                     @if (User.IsInRole("Administrator"))
                     {
                         <li class="nav-title">
                             Danh mục
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="MistakeCategory" asp-action="Index" class="nav-link">
+                                <i class="icon-pie-chart"></i> Danh sách nhóm lỗi
+                            </a>
                         </li>
                         <li class="nav-item">
                             <a asp-controller="Mistake" asp-action="Index" class="nav-link">
@@ -122,20 +127,20 @@
                             </a>
                         </li>
                         @*<li class="nav-item">
-                                <a asp-controller="passionbrand" asp-action="Index" class="nav-link">
-                                    <i class="icon-pie-chart"></i> Passion Brand
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a asp-controller="manufacturer" asp-action="Index" class="nav-link">
-                                    <i class="icon-pie-chart"></i> Xưởng sản xuất
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href=".\account\index">
-                                    <i class="icon-pie-chart"></i> Danh sách User
-                                </a>
-                            </li>*@
+                <a asp-controller="passionbrand" asp-action="Index" class="nav-link">
+                    <i class="icon-pie-chart"></i> Passion Brand
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-controller="manufacturer" asp-action="Index" class="nav-link">
+                    <i class="icon-pie-chart"></i> Xưởng sản xuất
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href=".\account\index">
+                    <i class="icon-pie-chart"></i> Danh sách User
+                </a>
+            </li>*@
                     }
 
                 </ul>

@@ -11,15 +11,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
 using OfficeOpenXml;
-using Artoo.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Artoo.Infrastructure;
 using Artoo.IServices;
 using Artoo.Common;
-using log4net;
-using log4net.Config;
-using System.Reflection;
-using log4net.Repository;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -36,7 +31,7 @@ namespace Artoo.Controllers
         private readonly IFactoryRepository _factoryRepository;
         private readonly IFinalWeekRepository _finalWeekRepository;
         private readonly ITechManagerRepository _techManagerRepository;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;      
 
         private readonly IInspectionImportService _inspectionImportService;
         private Tenant _tenant;
@@ -142,127 +137,6 @@ namespace Artoo.Controllers
                 }
             }
         }
-
-        //[HttpPost]
-        //public async Task<IActionResult> UploadFile(IFormFile file)
-        //{
-        //    var path = Path.Combine(
-        //                Directory.GetCurrentDirectory(), "wwwroot\\FileUploads",
-        //                file.GetFilename());
-
-        //    input excel file to system in order read it
-        //    using (var stream = new FileStream(path, FileMode.Create))
-        //    {
-        //        await file.CopyToAsync(stream);
-        //    }
-
-        //    FileInfo fileInfo = new FileInfo(path);
-        //    using (ExcelPackage package = new ExcelPackage(fileInfo))
-        //    {
-        //        List<Inspection> inspectionList = new List<Inspection>();
-        //        int workSheetTotal = package.Workbook.Worksheets.Count;
-        //        try
-        //        {
-        //            for (int j = 1; j <= workSheetTotal; j++)
-        //            {
-        //                ExcelWorksheet workSheet = package.Workbook.Worksheets[j];
-        //                if (workSheet.Dimension != null)
-        //                {
-        //                    int totalRows = workSheet.Dimension.Rows;
-        //                    var factories = _factoryRepository.Factories;
-        //                    var finalWeeks = _finalWeekRepository.FinalWeeks;
-        //                    for (int i = 2; i <= totalRows; i++)
-        //                    {
-        //                        var inspection = new Inspection();
-
-        //                        inspection.OrderNumber = AssignCell(i, workSheet, "Order number");
-        //                        inspection.FactoryName = AssignCell(i, workSheet, "Factory");
-        //                        inspection.BookingStatus = true;
-        //                        inspection.InspectStatus = true;
-        //                        inspection.Faked = true;
-        //                        inspection.Result = AssignCell(i, workSheet, "Result") == InspectionResultEnum.Accept.ToString() ? (int)InspectionResultEnum.Accept : (int)InspectionResultEnum.Reject;
-        //                        Add finalweek into db, finalweek is based on Final column in excel file. It must be unique. If it is existing, get existing id.
-        //                        double finalDate;
-        //                        int weekOfYear = 0;
-        //                        if (double.TryParse(AssignCell(i, workSheet, "Final"), out finalDate))
-        //                        {
-        //                            inspection.FinalDate = FromOADate(finalDate);
-        //                            inspection.DateChecked = inspection.FinalDate;
-        //                            weekOfYear = ImportHelper.GetIso8601WeekOfYear(inspection.FinalDate);
-        //                        }
-
-        //                        if (weekOfYear != 0)
-        //                        {
-        //                            the format standard is Year + -W + WeekNumberOfYear, for example: 2018 - W14
-        //                            var finalWeekName = inspection.FinalDate.Year.ToString() + "-W" + weekOfYear;
-        //                            var existingFinalWeek = finalWeeks.FirstOrDefault(x => x.Name == finalWeekName);
-        //                            if finalweek is existing, get the existing FinalWeekID and assign it to inspection
-        //                            if (existingFinalWeek != null)
-        //                            {
-        //                                inspection.FinalWeekId = existingFinalWeek.FinalWeekId;
-        //                            }
-        //                            if finalweek is NOT existing, create new one and assign this to inspection
-        //                            else
-        //                            {
-        //                                var newFinalWeek = new FinalWeek()
-        //                                {
-        //                                    Week = weekOfYear,
-        //                                    Name = finalWeekName,
-        //                                    Year = Int32.Parse(inspection.FinalDate.Year.ToString()),
-        //                                    Description = inspection.FinalDate.Year.ToString() + "-W" + weekOfYear,
-        //                                    FinalWeekDay = inspection.FinalDate,
-        //                                    DateRegister = DateTime.Now
-        //                                };
-
-        //                                int finalWeekId = _finalWeekRepository.CreateFinalWeek(newFinalWeek);
-        //                                inspection.FinalWeekId = finalWeekId;
-        //                            }
-        //                        }
-
-
-        //                        Add factory into db, factory is based on Factory column in excel file. It must be unique. If it is existing, get existing id.
-        //                        var factory = factories.FirstOrDefault(x => x.Name.Contains(inspection.FactoryName));
-        //                        if (factory != null)
-        //                        {
-        //                            inspection.FactoryId = factory.FactoryId;
-        //                        }
-        //                        else
-        //                        {
-        //                            var newFactory = new Factory()
-        //                            {
-        //                                Name = inspection.FactoryName
-        //                            };
-
-        //                            inspection.FactoryId = _factoryRepository.CreateFactory(newFactory);
-        //                        }
-        //                        var existingTechManager = techManagers.FirstOrDefault(x => x.Name == inspection.TechManagerName);
-        //                        if (existingTechManager != null)
-        //                        {
-        //                            inspection.TechManagerId = existingTechManager.TechManagerId;
-        //                        }
-        //                        else
-        //                        {
-        //                            inspection.TechManagerId = existingTechManager.TechManagerId;
-        //                        }
-
-        //                        inspectionList.Add(inspection);
-        //                    }
-        //                }
-        //            }
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            if (System.IO.File.Exists(path))
-        //            {
-        //                System.IO.File.Delete(path);
-        //            }
-        //        }
-
-        //        _inspectionRepository.InsertList(inspectionList);
-
-        //    }
-        //    return RedirectToAction("Index");
-        //}
 
         [HttpPost]
         public async Task<IActionResult> UploadFile(IFormFile file)
@@ -453,11 +327,6 @@ namespace Artoo.Controllers
             var path = Path.Combine(
                            Directory.GetCurrentDirectory(),
                            "wwwroot\\FileUploads" + "\\" + _tenant.HostName, filename);
-
-            //var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
-            //XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
-            //var _logger = LogManager.GetLogger(typeof(ArtooApp.Program));
-            //_logger.Error("Delete :" + path);
 
             if (System.IO.File.Exists(path))
             {

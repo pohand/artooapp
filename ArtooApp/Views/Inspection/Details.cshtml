@@ -153,7 +153,13 @@
                                 </div>
                                 <div class="col-md-10">
                                     <div class="form-group row col-md-12">
-                                        <div class="col-md-8">
+                                        <div class="col-md-4">
+                                            <div class="col-md-12">
+                                                <select asp-for="SelectedManualMistakeCategoryId" asp-items="@Model.ManualMistakeCategoryList" class="form-control"></select>
+                                                <span asp-validation-for="SelectedManualMistakeCategoryId" class="help-block"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
                                             <input id="ManualMistakeSelect" class="form-control tagsinput" />
                                         </div>
                                         <div class="col-md-3">
@@ -190,7 +196,13 @@
                                 </div>
                                 <div class="col-md-10">
                                     <div class="form-group row col-md-12">
-                                        <div class="col-md-8">
+                                        <div class="col-md-4">
+                                            <div class="col-md-12">
+                                                <select asp-for="SelectedDeviceMistakeCategoryId" asp-items="@Model.DeviceMistakeCategoryList" class="form-control"></select>
+                                                <span asp-validation-for="SelectedDeviceMistakeCategoryId" class="help-block"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
                                             <input id="DeviceMistakeSelect" class="form-control tagsinput" data-role="tagsinput" />
                                         </div>
                                         <div class="col-md-3">
@@ -264,7 +276,7 @@
             //$('#IsThirdParty').click(function () {
             //    $("#divDate").toggle(this.checked);
             //});
-            
+
             $("#ManualMistakeQuantityButton").prop('disabled', true);
             $("#DeviceMistakeQuantityButton").prop('disabled', true);
             $("#ManualMistakeSelect").autocomplete({
@@ -273,7 +285,7 @@
                         url: "/Inspection/GetManualMistakeByPrefix",
                         type: "POST",
                         dataType: "json",
-                        data: { prefix: GetCurrentSearchTerm(req.term) },
+                        data: { prefix: GetCurrentSearchTerm(req.term), mistakeCategoryId: parseInt($("#SelectedManualMistakeCategoryId").val()) },
                         success: function (data) {
                             resp($.map(data, function (item) {
                                 return { label: item.name, value: item.name };
@@ -348,13 +360,11 @@
             });
 
             function splitCurrentText(LastTerm) {
-
                 //return LastTerm.split(/,\s*/);
                 return LastTerm.split("|");
             }
 
             function GetCurrentSearchTerm(LastTerm) {
-
                 return splitCurrentText(LastTerm).pop();
             }
         });

@@ -317,6 +317,8 @@ namespace ArtooApp.Migrations
 
                     b.Property<int>("ManualType");
 
+                    b.Property<int?>("MistakeCategoryID");
+
                     b.Property<string>("Name")
                         .IsRequired();
 
@@ -326,7 +328,31 @@ namespace ArtooApp.Migrations
 
                     b.HasKey("MistakeId");
 
+                    b.HasIndex("MistakeCategoryID");
+
                     b.ToTable("Mistakes");
+                });
+
+            modelBuilder.Entity("Artoo.Models.MistakeCategory", b =>
+                {
+                    b.Property<int>("MistakeCategoryID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("DateRegister");
+
+                    b.Property<string>("Description");
+
+                    b.Property<int>("MistakeType");
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.Property<int?>("TenantId");
+
+                    b.HasKey("MistakeCategoryID");
+
+                    b.ToTable("MistakeCategory");
                 });
 
             modelBuilder.Entity("Artoo.Models.MistakeFree", b =>
@@ -574,6 +600,13 @@ namespace ArtooApp.Migrations
                         .WithMany()
                         .HasForeignKey("MistakeId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Artoo.Models.Mistake", b =>
+                {
+                    b.HasOne("Artoo.Models.MistakeCategory", "MistakeCategory")
+                        .WithMany("Mistakes")
+                        .HasForeignKey("MistakeCategoryID");
                 });
 
             modelBuilder.Entity("Artoo.Models.MistakeFree", b =>

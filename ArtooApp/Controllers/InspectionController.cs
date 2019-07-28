@@ -13,6 +13,7 @@ using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using Artoo.Helpers;
+using Artoo.IServices;
 
 namespace Artoo.Controllers
 {
@@ -21,12 +22,14 @@ namespace Artoo.Controllers
     {
         private readonly IInspectionRepository _inspectionRepository;
         private readonly IMistakeRepository _mistakeRepository;
+        private readonly IMistakeCategoryRepository _mistakeCategoryRepository;
         private readonly IPassionBrandRepository _passionBrandRepository;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IFinalWeekRepository _finalWeekRepository;
         private readonly IFactoryRepository _factoryRepository;
         private readonly IEmailRepository _emailRepository;
         private readonly IMistakeFreeRepository _mistakeFreeRepository;
+        private readonly IMistakeCategoryService _mistakeCategoryService;
 
         private const int itemsPerPage = 20;
         public InspectionController(IInspectionRepository inspectionRepository,
@@ -36,7 +39,9 @@ namespace Artoo.Controllers
             IFinalWeekRepository finalWeekRepository,
             IFactoryRepository factoryRepository,
             IEmailRepository emailRepository,
-            IMistakeFreeRepository mistakeFreeRepository)
+            IMistakeFreeRepository mistakeFreeRepository,
+            IMistakeCategoryRepository mistakeCategoryRepository,
+            IMistakeCategoryService mistakeCategoryService)
         {
             _inspectionRepository = inspectionRepository;
             _mistakeRepository = mistakeRepository;
@@ -46,6 +51,8 @@ namespace Artoo.Controllers
             _factoryRepository = factoryRepository;
             _emailRepository = emailRepository;
             _mistakeFreeRepository = mistakeFreeRepository;
+            _mistakeCategoryRepository = mistakeCategoryRepository;
+            _mistakeCategoryService = mistakeCategoryService;
         }
 
         public async Task<ViewResult> Index(string factoryString, string orderString, string weekString, string techManagerString, int page = 1)
@@ -506,6 +513,9 @@ namespace Artoo.Controllers
         {
             var existing = _inspectionRepository.GetInspectionById(id);
 
+            var manualMistakeCategories = _mistakeCategoryService.MistakeCategoriesByType(MistakeEnum.ManualMistake);
+            var deviceMistakeCategories = _mistakeCategoryService.MistakeCategoriesByType(MistakeEnum.DeviceMistake);
+
             var manualMistake = _mistakeRepository.Mistakes.Where(x => x.ManualType == (int)MistakeEnum.ManualMistake)
                 .Select(r => new SelectListItem
                 {
@@ -588,7 +598,9 @@ namespace Artoo.Controllers
                 PassionBrandId = existing.PassionBrandId,
                 TechManagerName = existing.TechManagerName,
                 Description = existing.Description,
-                IsThirdParty = rdParty
+                IsThirdParty = rdParty,
+                ManualMistakeCategoryList = manualMistakeCategories,
+                DeviceMistakeCategoryList = deviceMistakeCategories
             };
             return View(inspectionVM);
         }
@@ -884,9 +896,9 @@ namespace Artoo.Controllers
             return RedirectToAction("Report", new { page, factoryString, orderString, weekString, techManagerString });
         }
 
-        public JsonResult GetManualMistakeByPrefix(string prefix)
+        public JsonResult GetManualMistakeByPrefix(string prefix, int mistakeCategoryId)
         {
-            var mistakes = _mistakeRepository.GetMistakeByPrefix(prefix, MistakeEnum.ManualMistake);
+            var mistakes = _mistakeRepository.GetMistakeByPrefix(prefix, MistakeEnum.ManualMistake, Convert.ToInt32(mistakeCategoryId));
             return Json(mistakes);
         }
 
