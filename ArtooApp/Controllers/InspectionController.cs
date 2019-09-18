@@ -724,6 +724,7 @@ namespace Artoo.Controllers
                 inspection.NumberChecked = inspectionVM.NumberChecked;
                 inspection.ProductQuantityChecked = inspectionVM.ProductQuantityChecked;
                 inspection.IsThirdParty = inspectionVM.IsThirdParty;
+                inspection.OrderType = inspectionVM.OrderType;
                 
                 //First of all, saving inspectdate when user selects third party checkbox.
                 //However, there is a minor change to allow to save inspect date as long as available thirdpartydate.
