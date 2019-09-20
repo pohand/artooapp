@@ -55,6 +55,7 @@ namespace Artoo.Controllers
             _techManagerRepository = techManagerRepository;
             _inspectionImportService = inspectionImportService;
             _userManager = userManager;
+            //_tenant = new Tenant();
         }
         public IActionResult Index()
         {

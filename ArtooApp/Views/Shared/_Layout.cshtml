@@ -65,18 +65,18 @@
                     {
                         <li class="nav-item">
                             <a asp-controller="Inspection" asp-action="Index" class="nav-link">
-                                <i class="icon-pie-chart"></i> Waiting List
+                                <i class="icon-pie-chart"></i> Total POs
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a asp-controller="Inspection" asp-action="List" class="nav-link">
-                                <i class="icon-pie-chart"></i> Inspection List
+                                <i class="icon-pie-chart"></i> My Inspection
                             </a>
                         </li>
                         <li class="nav-item">
                             <a asp-controller="Inspection" asp-action="RejectList" class="nav-link">
-                                <i class="icon-pie-chart"></i> Inspection Reject
+                                <i class="icon-pie-chart"></i> Rejected PO
                             </a>
                         </li>
                         <li class="nav-item">
@@ -93,13 +93,13 @@
                             </a>
                         </li>
                     }
-                    <li class="divider"></li>
+                    @*<li class="divider"></li>
                     <li class="nav-title">
                         Management
                     </li>
                     <li class="nav-item">
                         <a asp-controller="workload" asp-action="Index" class="nav-link"><i class="icon-calculator"></i> Team Workload </a>
-                    </li>
+                    </li>*@
                     <li class="divider"></li>
                     @if (User.IsInRole("Administrator"))
                     {

@@ -13,12 +13,14 @@ using System.Drawing;
 using Artoo.Common;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Artoo.IServices;
+using Artoo.Infrastructure;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Artoo.Controllers
 {
     [Authorize]
+    [ServiceFilter(typeof(TenantAttribute))]
     public class MistakeController : Controller
     {
         private readonly IMistakeRepository _mistakeRepository;
@@ -31,10 +33,15 @@ namespace Artoo.Controllers
         {
             _mistakeRepository = mistakeRepository;
             _mistakeCategoryService = mistakeCategoryService;
+            //_tenant = new Tenant();
         }
 
         public IActionResult Create(string type)
         {
+            if (RouteData != null)
+            {
+                _tenant = (Tenant)RouteData.Values.SingleOrDefault(r => r.Key == "tenant").Value;
+            }
             MistakeViewModel model = new MistakeViewModel();
             List<SelectListItem> mistakeCategories = new List<SelectListItem>();
             if (type == "1")
@@ -42,6 +49,7 @@ namespace Artoo.Controllers
                 mistakeCategories = _mistakeCategoryService.MistakeCategoriesByType(MistakeEnum.DeviceMistake);
                 model.MistakeCategoryList = mistakeCategories;
                 model.ManualType = 1;
+                model.ImageUrl = _tenant?.HostName + "/" + model.ImageUrl;
             }
             else
             {
@@ -55,6 +63,11 @@ namespace Artoo.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] MistakeViewModel mistakeVM)
         {
+            if (RouteData != null)
+            {
+                _tenant = (Tenant)RouteData.Values.SingleOrDefault(r => r.Key == "tenant").Value;
+            }
+
             if (ModelState.IsValid)
             {
                 var mistake = new Mistake();
@@ -67,7 +80,7 @@ namespace Artoo.Controllers
                 if (mistakeVM.Image != null && mistakeVM.Image.Length != 0)
                 {
                     var path = Path.Combine(
-                        Directory.GetCurrentDirectory(), "wwwroot\\ErrorImages", mistakeVM.Image.GetFilename());
+                        Directory.GetCurrentDirectory(), "wwwroot\\ErrorImages" + "\\" + _tenant?.HostName, mistakeVM.Image.GetFilename());
 
                     using (var stream = new FileStream(path, FileMode.Create))
                     {
@@ -99,6 +112,10 @@ namespace Artoo.Controllers
         [HttpPost]
         public async Task<IActionResult> Details([FromForm] MistakeViewModel mistakeVM)
         {
+            if (RouteData != null)
+            {
+                _tenant = (Tenant)RouteData.Values.SingleOrDefault(r => r.Key == "tenant").Value;
+            }
             if (ModelState.IsValid)
             {
                 var existing = _mistakeRepository.GetMistakeById(mistakeVM.MistakeId);
@@ -118,11 +135,11 @@ namespace Artoo.Controllers
                         if (existing.ImageUrl != null)
                         {
                             var existingImagePath = Path.Combine(
-                        Directory.GetCurrentDirectory(), "wwwroot\\ErrorImages", existing.ImageUrl);
+                        Directory.GetCurrentDirectory(), "wwwroot\\ErrorImages" + "\\" + _tenant?.HostName, existing.ImageUrl);
                             Remove(existingImagePath);
                         }
                         var path = Path.Combine(
-                            Directory.GetCurrentDirectory(), "wwwroot\\ErrorImages", mistakeVM.Image.GetFilename());
+                            Directory.GetCurrentDirectory(), "wwwroot\\ErrorImages" + "\\" + _tenant?.HostName, mistakeVM.Image.GetFilename());
 
                         using (var stream = new FileStream(path, FileMode.Create))
                         {
@@ -158,7 +175,7 @@ namespace Artoo.Controllers
 
             var path = Path.Combine(
                            Directory.GetCurrentDirectory(),
-                           "wwwroot\\FileUploads" + "\\" + _tenant.HostName, filename);
+                           "wwwroot\\FileUploads" + "\\" + _tenant?.HostName, filename);
 
             if (System.IO.File.Exists(path))
             {
@@ -203,6 +220,11 @@ namespace Artoo.Controllers
 
         public IActionResult Details(int id)
         {
+            if (RouteData != null)
+            {
+                _tenant = (Tenant)RouteData.Values.SingleOrDefault(r => r.Key == "tenant").Value;
+            }
+
             var mistake = _mistakeRepository.GetMistakeById(id);            
             if (mistake == null)
                 return NotFound();
@@ -214,7 +236,7 @@ namespace Artoo.Controllers
                 Description = mistake.Description,
                 ManualType = mistake.ManualType,
                 DateRegister = mistake.DateRegister,
-                ImageUrl = mistake.ImageUrl,
+                ImageUrl = _tenant?.HostName + "/" + mistake.ImageUrl,
                 Name = mistake.Name,
                 Status = mistake.Status,
                 MistakeCategoryList = mistakeCategories,
