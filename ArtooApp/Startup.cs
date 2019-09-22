@@ -44,7 +44,8 @@ namespace ArtooApp
                     options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<AppDbContext>();
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddUserManager<AppUserManager>(); //http://ericsmasal.com/2018/06/05/capture-tenant-in-asp-net-core-2-0-web-api/
 
 
             services.ConfigureApplicationCookie(options =>
