@@ -58,7 +58,7 @@ namespace Artoo.Controllers
             _configurationRepository = configurationRepository;
         }
 
-        public async Task<ViewResult> Index(string factoryString, string orderString, string weekString, string techManagerString, int page = 1)
+        public async Task<ViewResult> Index(string factoryString, string orderString, string weekString, string techManagerString, string imanString, int page = 1)
         {
             try
             {
@@ -99,6 +99,12 @@ namespace Artoo.Controllers
                 {
                     inspectionList = inspectionList.Where(x => x.TechManagerName.IndexOf(techManagerString, StringComparison.OrdinalIgnoreCase) >= 0);
                 }
+
+                if (!string.IsNullOrEmpty(imanString))
+                {
+                    inspectionList = inspectionList.Where(x => x.IMAN.IndexOf(imanString, StringComparison.OrdinalIgnoreCase) >= 0);
+                }
+
                 var waitingList = inspectionList.Where(x => x.InspectStatus == false && x.Result == 0);
                 var count = waitingList.Count();
                 int pageCount = (count + itemsPerPage - 1) / itemsPerPage;
@@ -184,6 +190,7 @@ namespace Artoo.Controllers
                     FactorySearchString = factoryInt.ToString(),
                     OrderNumberSearchString = orderString,
                     TechManagerNameSearchString = techManagerString,
+                    ImanSearchString = imanString,
                     FactoryList = factoryList
                 });
             }
@@ -193,7 +200,7 @@ namespace Artoo.Controllers
             }
 
         }
-        public async Task<ViewResult> List(string factoryString, string orderString, string weekString, string techManagerString, int page = 1)
+        public async Task<ViewResult> List(string factoryString, string orderString, string weekString, string techManagerString, string imanString, int page = 1)
         {
             var username = await _userManager.GetUserAsync(User);
             var inspectionList = _inspectionRepository.Inspections;
@@ -234,6 +241,11 @@ namespace Artoo.Controllers
             if (!string.IsNullOrEmpty(techManagerString))
             {
                 inspectionList = inspectionList.Where(x => x.TechManagerName.IndexOf(techManagerString, StringComparison.OrdinalIgnoreCase) >= 0);
+            }
+
+            if (!string.IsNullOrEmpty(imanString))
+            {
+                inspectionList = inspectionList.Where(x => x.IMAN.IndexOf(imanString, StringComparison.OrdinalIgnoreCase) >= 0);
             }
 
             var count = inspectionList.Where(p => p.BookingStatus == true && p.InspectStatus == false).Count();
@@ -300,6 +312,7 @@ namespace Artoo.Controllers
                 FactorySearchString = factoryInt.ToString(),
                 OrderNumberSearchString = orderString,
                 TechManagerNameSearchString = techManagerString,
+                ImanSearchString = imanString,
                 FactoryList = factoryList
             });
             //End Search options
@@ -352,6 +365,7 @@ namespace Artoo.Controllers
             {
                 inspectionList = inspectionList.Where(x => x.TechManagerName.Contains(techManagerString, StringComparison.OrdinalIgnoreCase));
             }
+
             var count = inspectionList.Where(p => p.BookingStatus == true && p.InspectStatus == true).Count();
             int pageCount = (count + itemsPerPage - 1) / itemsPerPage;
             IEnumerable<Inspection> inspections = inspectionList.Where(p => p.BookingStatus == true && p.InspectStatus == true)
@@ -478,7 +492,7 @@ namespace Artoo.Controllers
             return results;
         }
 
-        public IActionResult Book(int bookid, string factoryString, string orderString, string weekString, string techManagerString, int page)
+        public IActionResult Book(int bookid, string factoryString, string orderString, string weekString, string techManagerString, string imanString, int page)
         {
             var inspection = _inspectionRepository.GetInspectionById(bookid);
             if (inspection == null)
@@ -486,22 +500,22 @@ namespace Artoo.Controllers
 
             var userId = _userManager.GetUserId(User);
             _inspectionRepository.BookInspection(bookid, userId);
-            return RedirectToAction("Index", new { page, factoryString, orderString, weekString, techManagerString });
+            return RedirectToAction("Index", new { page, factoryString, orderString, weekString, techManagerString, imanString });
 
         }
 
-        public IActionResult UnBook(int bookid, string factoryString, string orderString, string weekString, string techManagerString, int page)
+        public IActionResult UnBook(int bookid, string factoryString, string orderString, string weekString, string techManagerString, string imanString, int page)
         {
             var inspection = _inspectionRepository.GetInspectionById(bookid);
             if (inspection == null)
                 return NotFound();
 
             _inspectionRepository.UnBookInspection(bookid);
-            return RedirectToAction("Index", new { page, factoryString, orderString, weekString, techManagerString });
+            return RedirectToAction("Index", new { page, factoryString, orderString, weekString, techManagerString, imanString });
 
         }
 
-        public IActionResult UnBookToList(int bookid, string factoryString, string orderString, string weekString, string techManagerString, int page)
+        public IActionResult UnBookToList(int bookid, string factoryString, string orderString, string weekString, string techManagerString, string imanString, int page)
         {
             var inspection = _inspectionRepository.GetInspectionById(bookid);
             if (inspection == null)
@@ -920,7 +934,7 @@ namespace Artoo.Controllers
             return Json(mistakes);
         }
 
-        public async Task<ViewResult> RejectList(string factoryString, string orderString, string weekString, string techManagerString, int page = 1)
+        public async Task<ViewResult> RejectList(string factoryString, string orderString, string weekString, string techManagerString, string imanString, int page = 1)
         {
             var username = await _userManager.GetUserAsync(User);
             var inspectionList = _inspectionRepository.Inspections;
@@ -962,6 +976,12 @@ namespace Artoo.Controllers
             {
                 inspectionList = inspectionList.Where(x => x.TechManagerName.IndexOf(techManagerString, StringComparison.OrdinalIgnoreCase) >= 0);
             }
+
+            if (!string.IsNullOrEmpty(imanString))
+            {
+                inspectionList = inspectionList.Where(x => x.IMAN.IndexOf(imanString, StringComparison.OrdinalIgnoreCase) >= 0);
+            }
+
             var list = inspectionList.Where(p => p.Result == (int)InspectionResultEnum.Reject && p.InspectStatus == true);
             var count = list.Count();
             int pageCount = (count + itemsPerPage - 1) / itemsPerPage;
@@ -1027,6 +1047,7 @@ namespace Artoo.Controllers
                 FactorySearchString = factoryInt.ToString(),
                 OrderNumberSearchString = orderString,
                 TechManagerNameSearchString = techManagerString,
+                ImanSearchString = imanString,
                 FactoryList = factoryList
             });
             //End Search options

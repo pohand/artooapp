@@ -31,9 +31,13 @@
                                         <option value="0">Please select</option>
                                     </select>
                                 </div>
-                                <div class="form-group col-md-3">
+                                @*<div class="form-group col-md-3">
                                     <label for="exampleInputName2" class="lablesearch">Kĩ thuật trưởng </label>
                                     <input type="text" value="@Model.TechManagerNameSearchString" name="techManagerString" class="form-control" placeholder="Kĩ thuật trưởng">
+                                </div>*@
+                                <div class="form-group col-md-3">
+                                    <label for="exampleInputName2" class="lablesearch">IMAN </label>
+                                    <input type="text" value="@Model.ImanSearchString" name="imanString" class="form-control" placeholder="IMAN">
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="exampleInputName2" class="lablesearch">Order Number </label>
@@ -90,14 +94,14 @@
                                     <td>
                                         @if (item.BookingStatus == false)
                                         {
-                                            <a asp-controller="Inspection" asp-action="Book" class="btn btn-success btn-sm" asp-route-bookid="@item.InspectionId" asp-route-page="@Model.Page.CurrentPage" asp-route-factoryString="@Model.FactorySearchString" asp-route-orderString="@Model.OrderNumberSearchString" asp-route-weekString="@Model.FinalWeekSearchString" asp-route-techManagerString="@Model.TechManagerNameSearchString">Book</a>
+                                            <a asp-controller="Inspection" asp-action="Book" class="btn btn-success btn-sm" asp-route-bookid="@item.InspectionId" asp-route-page="@Model.Page.CurrentPage" asp-route-factoryString="@Model.FactorySearchString" asp-route-orderString="@Model.OrderNumberSearchString" asp-route-weekString="@Model.FinalWeekSearchString" asp-route-imanString="@Model.ImanSearchString" asp-route-techManagerString="@Model.TechManagerNameSearchString" >Book</a>
                                         }
                                         else if (item.BookingStatus == true && item.InspectStatus == false)
                                         {
                                             //<a asp-controller="Inspection" asp-action="UnBook" class="btn btn-danger btn-sm" asp-route-bookid="@item.InspectionId" asp-route-page="@Model.Page.CurrentPage" asp-route-factoryString="@Model.FactorySearchString" asp-route-orderString="@Model.OrderNumberSearchString" asp-route-weekString="@Model.FinalWeekSearchString" asp-route-techManagerString="@Model.TechManagerNameSearchString">UnBook</a>
                                             if (string.IsNullOrEmpty(item.UserBooking))
                                             {
-                                                <a asp-controller="Inspection" asp-action="UnBook" class="btn btn-danger btn-sm" asp-route-bookid="@item.InspectionId" asp-route-page="@Model.Page.CurrentPage" asp-route-factoryString="@Model.FactorySearchString" asp-route-orderString="@Model.OrderNumberSearchString" asp-route-weekString="@Model.FinalWeekSearchString" asp-route-techManagerString="@Model.TechManagerNameSearchString">UnBook</a>
+                                                <a asp-controller="Inspection" asp-action="UnBook" class="btn btn-danger btn-sm" asp-route-bookid="@item.InspectionId" asp-route-page="@Model.Page.CurrentPage" asp-route-factoryString="@Model.FactorySearchString" asp-route-orderString="@Model.OrderNumberSearchString" asp-route-weekString="@Model.FinalWeekSearchString" asp-route-imanString="@Model.ImanSearchString" asp-route-techManagerString="@Model.TechManagerNameSearchString" >UnBook</a>
                                             }
                                             else
                                             {
@@ -122,7 +126,7 @@
                                 }
                                 else
                                 {
-                                    <a asp-controller="Inspection" asp-action="Index" class="page-link" asp-route-page="@Model.Page.PreviousPage" asp-route-factoryString="@Model.FactorySearchString" asp-route-orderString="@Model.OrderNumberSearchString" asp-route-weekString="@Model.FinalWeekSearchString" asp-route-techManagerString="@Model.TechManagerNameSearchString">Prev</a>
+                                    <a asp-controller="Inspection" asp-action="Index" class="page-link" asp-route-page="@Model.Page.PreviousPage" asp-route-factoryString="@Model.FactorySearchString" asp-route-orderString="@Model.OrderNumberSearchString" asp-route-weekString="@Model.FinalWeekSearchString" asp-route-techManagerString="@Model.TechManagerNameSearchString" asp-route-imanString="@Model.ImanSearchString">Prev</a>
                                 }
                             </li>
                             @if (Model.Page.PageCount > 10)
@@ -140,7 +144,7 @@
                                     else
                                     {
                                         <li class="page-item">
-                                            <a asp-controller="Inspection" asp-action="Index" class="page-link" asp-route-page="@i" asp-route-factoryString="@Model.FactorySearchString" asp-route-orderString="@Model.OrderNumberSearchString" asp-route-weekString="@Model.FinalWeekSearchString" asp-route-techManagerString="@Model.TechManagerNameSearchString">@i</a>
+                                            <a asp-controller="Inspection" asp-action="Index" class="page-link" asp-route-page="@i" asp-route-factoryString="@Model.FactorySearchString" asp-route-orderString="@Model.OrderNumberSearchString" asp-route-weekString="@Model.FinalWeekSearchString" asp-route-techManagerString="@Model.TechManagerNameSearchString" asp-route-imanString="@Model.ImanSearchString">@i</a>
                                         </li>
                                     }
                                 }
@@ -158,7 +162,7 @@
                                     else
                                     {
                                         <li class="page-item">
-                                            <a asp-controller="Inspection" asp-action="Index" class="page-link" asp-route-page="@i" asp-route-factoryString="@Model.FactorySearchString" asp-route-orderString="@Model.OrderNumberSearchString" asp-route-weekString="@Model.FinalWeekSearchString" asp-route-techManagerString="@Model.TechManagerNameSearchString">@i</a>
+                                            <a asp-controller="Inspection" asp-action="Index" class="page-link" asp-route-page="@i" asp-route-factoryString="@Model.FactorySearchString" asp-route-orderString="@Model.OrderNumberSearchString" asp-route-weekString="@Model.FinalWeekSearchString" asp-route-techManagerString="@Model.TechManagerNameSearchString" asp-route-imanString="@Model.ImanSearchString">@i</a>
                                         </li>
                                     }
                                 }
@@ -171,7 +175,7 @@
                                 }
                                 else
                                 {
-                                    <a asp-controller="Inspection" asp-action="Index" class="page-link" asp-route-page="@Model.Page.NextPage" asp-route-factoryString="@Model.FactorySearchString" asp-route-orderString="@Model.OrderNumberSearchString" asp-route-weekString="@Model.FinalWeekSearchString" asp-route-techManagerString="@Model.TechManagerNameSearchString">Next</a>
+                                    <a asp-controller="Inspection" asp-action="Index" class="page-link" asp-route-page="@Model.Page.NextPage" asp-route-factoryString="@Model.FactorySearchString" asp-route-orderString="@Model.OrderNumberSearchString" asp-route-weekString="@Model.FinalWeekSearchString" asp-route-techManagerString="@Model.TechManagerNameSearchString" asp-route-imanString="@Model.ImanSearchString">Next</a>
                                 }
                             </li>
                         </ul>

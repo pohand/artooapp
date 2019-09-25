@@ -15,6 +15,7 @@ namespace Artoo.ViewModels
         public string FactorySearchString { get; set; }
         public string OrderNumberSearchString { get; set; }
         public string TechManagerNameSearchString { get; set; }
+        public string ImanSearchString { get; set; }
         public IEnumerable<InspectionViewModel> InspectionList { get; set; }
         public List<SelectListItem> ResultList { get; set; }
         public string ResultSearchString { get; set; }
