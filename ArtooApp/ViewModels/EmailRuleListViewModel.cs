@@ -9,5 +9,6 @@ namespace Artoo.ViewModels
     public class EmailRuleListViewModel
     {
         public List<EmailRuleViewModel> EmailRules { get; set; }
+        public bool SendAllMail { get; set; }
     }
 }

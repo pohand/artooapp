@@ -40,4 +40,9 @@ namespace Artoo.Common
         garmex = 2,
         tng = 3
     }
+
+    public enum ConfigurationEnum
+    {
+        sendAllMail = 1
+    }
 }

@@ -30,6 +30,7 @@ namespace Artoo.Controllers
         private readonly IEmailRepository _emailRepository;
         private readonly IMistakeFreeRepository _mistakeFreeRepository;
         private readonly IMistakeCategoryService _mistakeCategoryService;
+        private readonly IConfigurationRepository _configurationRepository;
 
         private const int itemsPerPage = 20;
         public InspectionController(IInspectionRepository inspectionRepository,
@@ -41,7 +42,8 @@ namespace Artoo.Controllers
             IEmailRepository emailRepository,
             IMistakeFreeRepository mistakeFreeRepository,
             IMistakeCategoryRepository mistakeCategoryRepository,
-            IMistakeCategoryService mistakeCategoryService)
+            IMistakeCategoryService mistakeCategoryService,
+            IConfigurationRepository configurationRepository)
         {
             _inspectionRepository = inspectionRepository;
             _mistakeRepository = mistakeRepository;
@@ -53,6 +55,7 @@ namespace Artoo.Controllers
             _mistakeFreeRepository = mistakeFreeRepository;
             _mistakeCategoryRepository = mistakeCategoryRepository;
             _mistakeCategoryService = mistakeCategoryService;
+            _configurationRepository = configurationRepository;
         }
 
         public async Task<ViewResult> Index(string factoryString, string orderString, string weekString, string techManagerString, int page = 1)
@@ -744,7 +747,15 @@ namespace Artoo.Controllers
 
                 if (inspectionVM.PassionBrandId > 0 && inspection.Result > 0)
                 {
-                    var mailList = _emailRepository.GetEmailByBrandResultOrderType(inspectionVM.PassionBrandId, (InspectionResultEnum)inspection.Result, (OrderTypeEnum)inspection.OrderType).ToList();
+                    List<Email> mailList = new List<Email>();
+                    if (_configurationRepository.GetConfigurationStatusByName(ConfigurationEnum.sendAllMail.ToString()))
+                    {
+                        mailList = _emailRepository.Emails.ToList();
+                    }
+                    else
+                    {
+                        mailList = _emailRepository.GetEmailByBrandResultOrderType(inspectionVM.PassionBrandId, (InspectionResultEnum)inspection.Result, (OrderTypeEnum)inspection.OrderType).ToList();
+                    }
                     var manualMistakeString = string.Empty;
                     if (inspectionVM.ManualMistakeString != null)
                     {

@@ -79,6 +79,8 @@ namespace ArtooApp
             services.AddTransient<ITechManagerRepository, TechManagerRepository>();
             services.AddTransient<IMistakeFreeRepository, MistakeFreeRepository>();
             services.AddTransient<IMistakeCategoryRepository, MistakeCategoryRepository>();
+            services.AddTransient<IConfigurationRepository, ConfigurationRepository>();
+            
             #endregion
 
             #region Service DI

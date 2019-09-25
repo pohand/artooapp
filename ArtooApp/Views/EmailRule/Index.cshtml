@@ -19,6 +19,23 @@
                         <strong>Email Rules</strong>
                     </div>
                     <div class="card-body">
+                        <form asp-controller="EmailRule" asp-action="Index" method="post" id="EmailRuleForm" class="form-horizontal" role="form">
+                            <div class="form-group row">
+                                <label class="col-md-2 form-control-label">Send to all without any rule</label>
+                                <div class="col-md-2">
+                                    <label class="switch switch-3d switch-primary">
+                                        <input type="checkbox" class="switch-input" name="SendAllMail" asp-for="SendAllMail">
+                                        <span class="switch-label"></span>
+                                        <span class="switch-handle"></span>
+                                    </label>
+                                </div>
+                                <div class="col-md-8">
+                                    <button type="submit" id="btnSubmit" class="btn btn-sm btn-primary">
+                                        <i class="fa fa-dot-circle-o"></i> Submit
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
                         <table class="table table-striped">
                             <thead>
                                 <tr>
@@ -32,25 +49,25 @@
                             <tbody>
                                 @foreach (var item in Model.EmailRules)
                                 {
-                                <tr>
-                                    <td>
-                                        <ul>
-                                            @foreach (var email in item.EmailList)
-                                            {
-                                                <li>
-                                                    @email.EmailAddress
-                                                </li>
-                                            }
-                                        </ul>
-                                    </td>
-                                    <td>@item.PassionBrand.Name</td>
-                                    <td>@((InspectionResultEnum)item.Result)</td>
-                                    <td>@((OrderTypeEnum)item.OrderType)</td>
-                                    <td>
-                                        <a asp-controller="EmailRule" asp-action="Details" class="btn btn-success" asp-route-id="@item.EmailRuleId">Detail</a>
-                                        <a asp-action="Delete" asp-route-id="@item.EmailRuleId" class="btn btn-danger">Delete</a>
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td>
+                                            <ul>
+                                                @foreach (var email in item.EmailList)
+                                                {
+                                                    <li>
+                                                        @email.EmailAddress
+                                                    </li>
+                                                }
+                                            </ul>
+                                        </td>
+                                        <td>@item.PassionBrand.Name</td>
+                                        <td>@((InspectionResultEnum)item.Result)</td>
+                                        <td>@((OrderTypeEnum)item.OrderType)</td>
+                                        <td>
+                                            <a asp-controller="EmailRule" asp-action="Details" class="btn btn-success" asp-route-id="@item.EmailRuleId">Detail</a>
+                                            <a asp-action="Delete" asp-route-id="@item.EmailRuleId" class="btn btn-danger">Delete</a>
+                                        </td>
+                                    </tr>
                                 }
 
                             </tbody>

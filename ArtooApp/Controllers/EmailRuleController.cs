@@ -19,14 +19,17 @@ namespace Artoo.Controllers
         private readonly IEmailRuleRepository _emailRuleRepository;
         private readonly IPassionBrandRepository _passionBrandRepository;
         private readonly IEmailRepository _emailRepository;
+        private readonly IConfigurationRepository _configurationRepository;
 
         public EmailRuleController(IEmailRuleRepository emailRuleRepository,
             IPassionBrandRepository passionBrandRepository,
-            IEmailRepository emailRepository)
+            IEmailRepository emailRepository,
+            IConfigurationRepository configurationRepository)
         {
             _emailRuleRepository = emailRuleRepository;
             _passionBrandRepository = passionBrandRepository;
             _emailRepository = emailRepository;
+            _configurationRepository = configurationRepository;
         }
 
         public List<SelectListItem> PassionBrands()
@@ -141,11 +144,26 @@ namespace Artoo.Controllers
                 emailRulesVM.Add(emailRuleVM);
             }
 
-            
+            ArtooConfiguration config = _configurationRepository.GetConfigurationByName(ConfigurationEnum.sendAllMail.ToString());
+            bool status = config == null ? false : config.Status;
+
             return View(new EmailRuleListViewModel
             {
-                EmailRules = emailRulesVM
+                EmailRules = emailRulesVM,
+                SendAllMail = status
             });
+        }
+
+        [HttpPost]
+        public IActionResult Index(EmailRuleListViewModel emailRuleListVM)
+        {
+            ArtooConfiguration configuration = new ArtooConfiguration{
+                Name = ConfigurationEnum.sendAllMail.ToString(),
+                Status = emailRuleListVM.SendAllMail
+            };
+
+            _configurationRepository.UpdateCofigurationByName(configuration);
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
