@@ -47,9 +47,9 @@ namespace Artoo.Models
             }
         }
 
-        public static void SeedUser(AppUserManager userManager)
+        public static void SeedUser(UserManager<ApplicationUser> userManager)
         {
-            var userApp = userManager.FindByNameAndTenantAsync("gmadmin", 2).Result;
+            var userApp = userManager.FindByNameAsync("gmadmin").Result;
             if (userApp == null)
             {
                 ApplicationUser user = new ApplicationUser();

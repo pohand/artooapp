@@ -270,6 +270,14 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
+
+            $(window).keydown(function (e) {
+                if (e.keyCode == 13) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+
             $("#ThirdPartyDate").datepicker();
 
             //Displaying ThirdPartyDate when IsThridParty is true. However, this regulation was canceled. style="display:none" was assigned to divDate
