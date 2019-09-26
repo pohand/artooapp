@@ -251,7 +251,7 @@ namespace Artoo.Controllers
             var count = inspectionList.Where(p => p.BookingStatus == true && p.InspectStatus == false).Count();
             int pageCount = (count + itemsPerPage - 1) / itemsPerPage;
             IEnumerable<Inspection> inspections = inspectionList.Where(p => p.BookingStatus == true && p.InspectStatus == false)
-                   .OrderByDescending(p => p.InspectionId).Skip((page - 1) * itemsPerPage)
+                   .OrderByDescending(p => p.OrderType).Skip((page - 1) * itemsPerPage)
             .Take(itemsPerPage);
 
             var inspectionListVM = new List<InspectionViewModel>();
@@ -269,6 +269,7 @@ namespace Artoo.Controllers
                     NumberChecked = inspection.NumberChecked,
                     OrderNumber = inspection.OrderNumber,
                     OrderQuantity = inspection.OrderQuantity,
+                    OrderType = inspection.OrderType,
                     OrderTypeName = inspection.OrderType == 1 ? "Implantation" : "Replenishment",
                     Parameter = inspection.Parameter,
                     PassionBrandName = inspection.PassionBrandName,
