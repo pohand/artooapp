@@ -151,84 +151,80 @@
                                 <div class="col-md-2">
                                     <label for="select">Kiểm tra bằng tay và mắt</label>
                                 </div>
-                                <div class="col-md-10">
-                                    <div class="form-group row col-md-12">
-                                        <div class="col-md-4">
-                                            <div class="col-md-12">
-                                                <select asp-for="SelectedManualMistakeCategoryId" asp-items="@Model.ManualMistakeCategoryList" class="form-control"></select>
-                                                <span asp-validation-for="SelectedManualMistakeCategoryId" class="help-block"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <input id="ManualMistakeSelect" class="form-control tagsinput" />
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="input-group">
-                                                <span class="input-group-btn">
-                                                    <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="quant[3]">
-                                                        <span class="fa-minus fa"></span>
-                                                    </button>
-                                                </span>
-                                                <input type="text" name="quant[3]" id="ManualMistakeQuantity" class="form-control input-number" value="1" min="1" max="100">
-                                                <span class="input-group-btn">
-                                                    <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[3]">
-                                                        <span class="fa-plus fa"></span>
-                                                    </button>
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-1">
-                                            <button type="button" id="ManualMistakeQuantityButton" class="btn btn-primary">
-                                                <i class="fa fa-dot-circle-o"></i> Add
+                                <div class="col-md-3">
+                                    <select asp-for="SelectedManualMistakeCategoryId" asp-items="@Model.ManualMistakeCategoryList" class="form-control"></select>
+                                    <span asp-validation-for="SelectedManualMistakeCategoryId" class="help-block"></span>
+                                </div>
+                                <div class="col-md-3">
+                                    <input id="ManualMistakeSelect" class="form-control tagsinput" />
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="input-group">
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="quant[3]">
+                                                <span class="fa-minus fa"></span>
                                             </button>
-                                        </div>
+                                        </span>
+                                        <input type="text" name="quant[3]" id="ManualMistakeQuantity" class="form-control input-number" value="1" min="1" max="100">
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[3]">
+                                                <span class="fa-plus fa"></span>
+                                            </button>
+                                        </span>
                                     </div>
-                                    <div class="form-group">
-                                        <input asp-for="ManualMistakeString" class="form-control" type="text" />
-                                        @*<input type="text" class="form-control" id="tokenfield-typeahead" value="blue" placeholder="Type something and hit enter" />*@
-                                        @*<select multiple="" asp-for="ManualMistakeIds" asp-items="@Model.ManualMistake" class="form-control"></select>*@
-                                    </div>
+                                </div>
+                                <div class="col-md-1 textright">
+                                    <button type="button" id="ManualMistakeQuantityButton" class="btn btn-primary">
+                                        <i class="fa fa-dot-circle-o"></i> Add
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-2">
+                                </div>
+                                <div class="col-md-10">
+                                    <input asp-for="ManualMistakeString" class="form-control" type="text" />
+                                    @*<input type="text" class="form-control" id="tokenfield-typeahead" value="blue" placeholder="Type something and hit enter" />*@
+                                    @*<select multiple="" asp-for="ManualMistakeIds" asp-items="@Model.ManualMistake" class="form-control"></select>*@
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <div class="col-md-2">
                                     <label for="select">Kiểm tra bằng thiết bị</label>
                                 </div>
-                                <div class="col-md-10">
-                                    <div class="form-group row col-md-12">
-                                        <div class="col-md-4">
-                                            <div class="col-md-12">
-                                                <select asp-for="SelectedDeviceMistakeCategoryId" asp-items="@Model.DeviceMistakeCategoryList" class="form-control"></select>
-                                                <span asp-validation-for="SelectedDeviceMistakeCategoryId" class="help-block"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <input id="DeviceMistakeSelect" class="form-control tagsinput" data-role="tagsinput" />
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="input-group">
-                                                <span class="input-group-btn">
-                                                    <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="quant[2]">
-                                                        <span class="fa-minus fa"></span>
-                                                    </button>
-                                                </span>
-                                                <input type="text" name="quant[2]" id="DeviceMistakeQuantity" class="form-control input-number" value="1" min="1" max="100">
-                                                <span class="input-group-btn">
-                                                    <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[2]">
-                                                        <span class="fa-plus fa"></span>
-                                                    </button>
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-1">
-                                            <button type="button" id="DeviceMistakeQuantityButton" class="btn btn-primary">
-                                                <i class="fa fa-dot-circle-o"></i> Add
+                                <div class="col-md-3">
+                                    <select asp-for="SelectedDeviceMistakeCategoryId" asp-items="@Model.DeviceMistakeCategoryList" class="form-control"></select>
+                                    <span asp-validation-for="SelectedDeviceMistakeCategoryId" class="help-block"></span>
+                                </div>
+                                <div class="col-md-3">
+                                    <input id="DeviceMistakeSelect" class="form-control tagsinput" data-role="tagsinput" />
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="input-group">
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="quant[2]">
+                                                <span class="fa-minus fa"></span>
                                             </button>
-                                        </div>
+                                        </span>
+                                        <input type="text" name="quant[2]" id="DeviceMistakeQuantity" class="form-control input-number" value="1" min="1" max="100">
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[2]">
+                                                <span class="fa-plus fa"></span>
+                                            </button>
+                                        </span>
                                     </div>
-                                    <div class="form-group">
-                                        <input asp-for="DeviceMistakeString" class="form-control" data-role="tagsinput" />
-                                    </div>
+                                </div>
+                                <div class="col-md-1 textright">
+                                    <button type="button" id="DeviceMistakeQuantityButton" class="btn btn-primary">
+                                        <i class="fa fa-dot-circle-o"></i> Add
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-2">
+                                </div>
+                                <div class="col-md-10">
+                                    <input asp-for="DeviceMistakeString" class="form-control" data-role="tagsinput" />
                                 </div>
                             </div>
                             <div class="form-group row">
