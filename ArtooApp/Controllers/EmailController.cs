@@ -24,6 +24,7 @@ namespace Artoo.Controllers
 
         public IActionResult Create()
         {
+            ViewBag.Current = "EmailList";
             return View();
         }
 
@@ -35,6 +36,8 @@ namespace Artoo.Controllers
                 _emailRepository.CreateEmail(email);
                 return RedirectToAction("Index");
             }
+
+            ViewBag.Current = "EmailList";
             return View(email);
         }
         // GET: /<controller>/
@@ -42,6 +45,7 @@ namespace Artoo.Controllers
         {
             IEnumerable<Email> emails = _emailRepository.Emails.OrderBy(p => p.EmailId);
 
+            ViewBag.Current = "EmailList";
             return View(new EmailListViewModel
             {
                 Emails = emails
@@ -57,6 +61,7 @@ namespace Artoo.Controllers
                 return RedirectToAction("Index");
             }
 
+            ViewBag.Current = "EmailList";
             return View(email);
         }
 
@@ -66,6 +71,7 @@ namespace Artoo.Controllers
             if (email == null)
                 return NotFound();
 
+            ViewBag.Current = "EmailList";
             return View(email);
         }
 

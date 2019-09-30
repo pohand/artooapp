@@ -57,6 +57,8 @@ namespace Artoo.Controllers
                 model.MistakeCategoryList = mistakeCategories;
                 model.ManualType = 0;
             }
+
+            ViewBag.Current = "MistakeList";
             return View(model);
         }
 
@@ -160,6 +162,7 @@ namespace Artoo.Controllers
                 return RedirectToAction("Index");
             }
 
+            ViewBag.Current = "MistakeList";
             return View(mistakeVM);
         }
 
@@ -201,6 +204,7 @@ namespace Artoo.Controllers
                    .OrderBy(p => p.MistakeId).Skip((deviceMistakeCurrent - 1) * itemsPerPage).Take(itemsPerPage);
 
             ViewBag.message = TempData["Message"];
+            ViewBag.Current = "MistakeList";
             return View(new MistakeListViewModel
             {
                 ManualMistakes = manualmistakes,
@@ -243,6 +247,7 @@ namespace Artoo.Controllers
                 SelectedMistakeCategoryId = mistake.MistakeCategoryID
             };
 
+            ViewBag.Current = "MistakeList";
             return View(mistakeVM);
         }
 

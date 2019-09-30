@@ -174,6 +174,7 @@ namespace Artoo.Controllers
                 var nextPage = page == pageCount ? page : (page + 1);
                 var previousPage = page > 1 ? (page - 1) : page;
 
+                ViewBag.Current = "TotalPOs";
                 return View(new InspectionListViewModel
                 {
                     InspectionList = inspectionListVM,
@@ -297,6 +298,7 @@ namespace Artoo.Controllers
             var nextPage = page == pageCount ? page : (page + 1);
             var previousPage = page > 1 ? (page - 1) : page;
 
+            ViewBag.Current = "MyInspection";
             return View(new InspectionListViewModel
             {
                 InspectionList = inspectionListVM,
@@ -429,6 +431,7 @@ namespace Artoo.Controllers
             var nextPage = page == pageCount ? page : (page + 1);
             var previousPage = page > 1 ? (page - 1) : page;
 
+            ViewBag.Current = "InspectionReport";
             return View(new InspectionListViewModel
             {
                 InspectionList = inspectionListVM,
@@ -1032,6 +1035,7 @@ namespace Artoo.Controllers
             var nextPage = page == pageCount ? page : (page + 1);
             var previousPage = page > 1 ? (page - 1) : page;
 
+            ViewBag.Current = "RejectedPO";
             return View(new InspectionListViewModel
             {
                 InspectionList = inspectionListVM,

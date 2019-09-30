@@ -70,6 +70,8 @@ namespace Artoo.Controllers
                 model.Files.Add(
                     new FileDetails { Name = item.Name, Path = item.PhysicalPath });
             }
+
+            ViewBag.Current = "ImportFile";
             return View(model);
         }
 

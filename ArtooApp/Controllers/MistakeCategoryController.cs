@@ -27,6 +27,7 @@ namespace Artoo.Controllers
             IEnumerable<MistakeCategory> manualMistakeCategories = _mistakeCategoryRepository.MistakeCategories.Where(x=>x.MistakeType == (int)MistakeEnum.ManualMistake).OrderBy(x => x.Name);
             IEnumerable<MistakeCategory> deviceMistakeCategories = _mistakeCategoryRepository.MistakeCategories.Where(x => x.MistakeType == (int)MistakeEnum.DeviceMistake).OrderBy(x => x.Name);
 
+            ViewBag.Current = "MistakeCategoryList";
             return View(new MistakeCategoryListViewModel
             {
                 ManualMistakeCategories = manualMistakeCategories,
@@ -42,6 +43,8 @@ namespace Artoo.Controllers
             {
                 model.MistakeType = 1;
             }
+
+            ViewBag.Current = "MistakeCategoryList";
             return View(model);
         }
 
@@ -54,6 +57,8 @@ namespace Artoo.Controllers
                 ViewBag.message = "Success";
                 return RedirectToAction("Index");
             }
+
+            ViewBag.Current = "MistakeCategoryList";
             return View(mistakeCategory);
         }
 
@@ -63,6 +68,7 @@ namespace Artoo.Controllers
             if (mistakeCategory == null)
                 return NotFound();
 
+            ViewBag.Current = "MistakeCategoryList";
             return View(mistakeCategory);
         }
 
@@ -84,6 +90,8 @@ namespace Artoo.Controllers
                 ViewBag.message = "Success";
                 return RedirectToAction("Index");
             }
+
+            ViewBag.Current = "MistakeCategoryList";
             return View(mistakeCategory);
         }
     }

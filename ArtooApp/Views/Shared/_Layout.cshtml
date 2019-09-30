@@ -64,23 +64,23 @@
                     @if (User.IsInRole("Administrator") || User.IsInRole("Manager") || User.IsInRole("QPL") || User.IsInRole("Factory Manager") || User.IsInRole("Decathlon Manager"))
                     {
                         <li class="nav-item">
-                            <a asp-controller="Inspection" asp-action="Index" class="nav-link">
+                            <a asp-controller="Inspection" asp-action="Index" class="nav-link @(ViewBag.Current == "TotalPOs" ? "active" : "")">
                                 <i class="icon-pie-chart"></i> Total POs
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a asp-controller="Inspection" asp-action="List" class="nav-link">
+                            <a asp-controller="Inspection" asp-action="List" class="nav-link @(ViewBag.Current == "MyInspection" ? "active" : "")">
                                 <i class="icon-pie-chart"></i> My Inspection
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a asp-controller="Inspection" asp-action="RejectList" class="nav-link">
+                            <a asp-controller="Inspection" asp-action="RejectList" class="nav-link @(ViewBag.Current == "RejectedPO" ? "active" : "")">
                                 <i class="icon-pie-chart"></i> Rejected PO
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a asp-controller="Inspection" asp-action="Report" class="nav-link">
+                            <a asp-controller="Inspection" asp-action="Report" class="nav-link @(ViewBag.Current == "InspectionReport" ? "active" : "")">
                                 <i class="icon-pie-chart"></i> Inspection Report
                             </a>
                         </li>
@@ -88,7 +88,7 @@
                     @if (User.IsInRole("Administrator") || User.IsInRole("Manager") || User.IsInRole("Factory Manager") || User.IsInRole("Decathlon Manager"))
                     {
                         <li class="nav-item">
-                            <a asp-controller="inspectionimport" asp-action="Index" class="nav-link">
+                            <a asp-controller="inspectionimport" asp-action="Index" class="nav-link @(ViewBag.Current == "ImportFile" ? "active" : "")">
                                 <i class="icon-pie-chart"></i> Import File
                             </a>
                         </li>
@@ -107,22 +107,22 @@
                             Danh mục
                         </li>
                         <li class="nav-item">
-                            <a asp-controller="MistakeCategory" asp-action="Index" class="nav-link">
+                            <a asp-controller="MistakeCategory" asp-action="Index" class="nav-link @(ViewBag.Current == "MistakeCategoryList" ? "active" : "")">
                                 <i class="icon-pie-chart"></i> Danh sách nhóm lỗi
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a asp-controller="Mistake" asp-action="Index" class="nav-link">
+                            <a asp-controller="Mistake" asp-action="Index" class="nav-link @(ViewBag.Current == "MistakeList" ? "active" : "")">
                                 <i class="icon-pie-chart"></i> Danh sách lỗi
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a asp-controller="email" asp-action="Index" class="nav-link">
+                            <a asp-controller="email" asp-action="Index" class="nav-link @(ViewBag.Current == "EmailList" ? "active" : "")">
                                 <i class="icon-pie-chart"></i> Danh sách email
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a asp-controller="emailrule" asp-action="Index" class="nav-link">
+                            <a asp-controller="emailrule" asp-action="Index" class="nav-link @(ViewBag.Current == "EmailRuleList" ? "active" : "")">
                                 <i class="icon-pie-chart"></i> Email Rules
                             </a>
                         </li>

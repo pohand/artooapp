@@ -84,6 +84,7 @@ namespace Artoo.Controllers
                 OrderTypeList = orderTypes
             };
 
+            ViewBag.Current = "EmailRuleList";
             return View(emailRuleVM);
         }
 
@@ -147,6 +148,7 @@ namespace Artoo.Controllers
             ArtooConfiguration config = _configurationRepository.GetConfigurationByName(ConfigurationEnum.sendAllMail.ToString());
             bool status = config == null ? false : config.Status;
 
+            ViewBag.Current = "EmailRuleList";
             return View(new EmailRuleListViewModel
             {
                 EmailRules = emailRulesVM,
@@ -236,6 +238,7 @@ namespace Artoo.Controllers
                 EmailIds = emailRuleDetail.Select(x=>x.EmailId).ToList()
             };
 
+            ViewBag.Current = "EmailRuleList";
             return View(emailRuleVM);
         }
 
